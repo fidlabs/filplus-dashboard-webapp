@@ -1,0 +1,35 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.buttonsWrap {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.button {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--color-echo-blue);
+  width: 24px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  color: var(--color-oyster-bay);
+}
+
+.button.active {
+  color: var(--color-horizon);
+}
+
+.icon {
+  pointer-events: none;
+}

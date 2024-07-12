@@ -1,0 +1,159 @@
+.header {
+  padding: 24px 16px 32px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.header:after {
+  content: '';
+  display: block;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 148px);
+  background: linear-gradient(268deg, var(--color-medium-turquoise) 0%, var(--color-dodger-blue) 100%);
+}
+
+.navWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoLink {
+  color: var(--color-white);
+  display: inline-flex;
+  align-items: center;
+}
+
+.filecoinPlus {
+  margin-left: 12px;
+  align-self: flex-end;
+  display: none;
+}
+
+.nav {
+  display: none;
+}
+
+.nav.active {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-cyprus);
+  box-shadow: 0 32px 64px rgba(var(--rgb-cyprus), 0.32);
+  z-index: 3;
+  padding: 24px 16px 48px;
+}
+
+.navHeader {
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navLink {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+  opacity: 0.64;
+  color: var(--color-white);
+  margin: 16px 0;
+  display: inline-flex;
+}
+
+.navLink:last-of-type {
+  margin-right: 0;
+}
+
+.navLink.active,
+.navLink:hover {
+  opacity: 1;
+}
+
+.navLink[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.externalLink > svg {
+  margin-top: 2px;
+  margin-left: 1px;
+}
+
+.menu,
+.close {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+}
+
+.close {
+  opacity: 0.64;
+}
+
+@media (min-width: 480px) {
+  .header {
+    padding: 24px 0 32px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding: 32px 0 64px;
+  }
+  .header:after {
+    height: calc(100% + 72px);
+  }
+  .filecoinPlus {
+    display: inline;
+  }
+  .nav {
+    display: flex;
+    margin-left: 80px;
+  }
+  .navWrap {
+    justify-content: flex-start;
+  }
+  .navHeader {
+    display: none;
+  }
+  .menu {
+    display: none;
+  }
+  .navLink {
+    margin-right: 16px;
+    position: relative;
+  }
+  .navLink.active:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    width: 16px;
+    background: var(--color-white);
+    border-radius: 2px;
+  }
+}
+
+@media (min-width: 1024px) {
+ .navLink {
+   margin-right: 32px;
+ }
+}

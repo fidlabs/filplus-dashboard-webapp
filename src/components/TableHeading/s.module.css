@@ -1,0 +1,158 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--theme-area-background);
+  border-radius: 8px 8px 0 0;
+  min-height: 64px;
+}
+
+.wrap.right {
+  gap: 8px;
+  padding: 0;
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  color: var(--color-black);
+}
+
+.portalContainer {
+  display: flex;
+  align-items: center;
+}
+
+.buttonBorder {
+  padding: 1px;
+  border-radius: 9px;
+  background: var(--color-oyster-bay);
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--color-solitude);
+}
+
+.buttonBorder:hover {
+  background: linear-gradient(90deg, var(--color-dodger-blue) 0%, var(--color-medium-turquoise) 100%);
+  box-shadow: 0 8px 16px 0 rgba(var(--rgb-dodger-blue), 0.12);
+}
+
+.exportButton {
+  border-radius: 8px;
+  background: var(--color-white);
+  border: none;
+  padding: 12px 24px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-horizon);
+  outline: none;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobileSpinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--rgb-white), 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exportIconWrap {
+  display: none;
+}
+
+.exportButton:focus,
+.buttonBorder:hover .exportButton {
+  color: var(--color-dodger-blue);
+}
+
+.buttonBorder[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.buttonBorder[aria-disabled="true"]:hover {
+  background: var(--color-oyster-bay);
+  box-shadow: 0 2px 4px var(--color-solitude);
+}
+
+.exportButton[disabled] {
+  pointer-events: none;
+  color: var(--color-horizon);
+}
+
+.exportButton[disabled]:focus,
+.buttonBorder[aria-disabled="true"]:hover .exportButton[disabled] {
+  color: var(--color-horizon);
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    min-height: 72px;
+  }
+  .title {
+    padding-left: 12px;
+  }
+  .exportIconWrap {
+    display: inline-flex;
+    margin-left: 8px;
+  }
+  .mobileSpinner {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .wrap {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) {
+  .exportButton:focus span,
+  .buttonBorder:hover span {
+    background: linear-gradient(90deg, var(--color-dodger-blue) 0%, var(--color-medium-turquoise) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .exportButton:focus .exportIconWrap,
+  .buttonBorder:hover .exportIconWrap {
+     color: var(--color-medium-turquoise);
+  }
+  .exportButton:focus,
+  .buttonBorder:hover .exportButton {
+    color: var(--color-dodger-blue);
+  }
+
+  .buttonBorder[aria-disabled="true"]:hover span,
+  .exportButton[disabled]:focus span {
+    background: var(--color-white);
+    -webkit-background-clip: content;
+    -webkit-text-fill-color: inherit;
+  }
+  .exportButton[disabled]:focus .exportIconWrap,
+  .buttonBorder[aria-disabled="true"]:hover .exportIconWrap {
+    color: var(--color-horizon);
+  }
+  .exportButton[disabled]:focus,
+  .buttonBorder[aria-disabled="true"]:hover .exportButton {
+    color: var(--color-horizon);
+  }
+}

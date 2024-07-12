@@ -1,0 +1,14 @@
+.icon {
+  animation: rotate 2s linear infinite;
+  transform-origin: center;
+  color: var(--color-echo-blue);
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

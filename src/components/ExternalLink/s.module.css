@@ -1,0 +1,16 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.link {
+  color: var(--color-echo-blue);
+  margin-left: 4px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.link:hover,
+.link:focus {
+  color: var(--color-horizon);
+}

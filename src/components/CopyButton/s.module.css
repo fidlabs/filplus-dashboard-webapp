@@ -1,0 +1,32 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+
+.icon {
+  color: var(--color-echo-blue);
+}
+
+.icon:hover {
+  color: var(--color-horizon);
+}
+
+.icon.copied {
+  color: var(--color-mountain-meadow);
+}
+
+.icon.failed {
+  color: var(--color-red);
+}

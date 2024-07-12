@@ -1,0 +1,14 @@
+.wrap {
+  padding: 12px 24px;
+  background: var(--theme-area-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 8px 8px;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    justify-content: space-between;
+  }
+}

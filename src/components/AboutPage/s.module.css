@@ -1,0 +1,29 @@
+.wrap {
+  background: var(--theme-area-background);
+  margin: 56px 0;
+  border-radius: 8px;
+  box-shadow: var(--theme-area-box-shadow);
+  padding: 24px;
+}
+
+.h3 {
+  color: var(--theme-text);
+  margin: 0;
+}
+
+p + .h3 {
+  margin: 32px 0 0;
+}
+
+.wrap p {
+  line-height: 1.5;
+}
+
+.wrap a {
+  color: var(--color-dodger-blue);
+}
+
+.wrap a:hover {
+  color: var(--color-horizon);
+}
+

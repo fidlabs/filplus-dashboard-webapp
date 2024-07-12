@@ -1,0 +1,144 @@
+/* https://www.color-blindness.com/color-name-hue/ */
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-dodger-blue: #0091ff;
+  --color-solitude: #f0f4f8;
+  --color-medium-turquoise: #39c1cb;
+  --color-oyster-bay: #d9e2ec;
+  --color-horizon: #627d98;
+  --color-echo-blue: #9fb3c8;
+  --color-cyprus: #102a43;
+  --color-mountain-meadow: #17b897;
+  --color-red: #ff0000;
+
+  --rgb-white: 255, 255, 255;
+  --rgb-black: 0, 0, 0;
+  --rgb-cyprus: 16, 42, 67;
+  --rgb-oyster-bay: 217, 226, 236;
+  --rgb-dodger-blue: 0, 144, 255;
+
+  --theme-background: var(--color-solitude);
+  --theme-text: var(--color-black);
+  --theme-text-secondary: var(--color-horizon);
+  --theme-area-background: var(--color-white);
+  --theme-area-box-shadow: 0 32px 64px rgba(16, 42, 67, 0.08);
+  --theme-link-color: var(--color-cyprus);
+  --theme-link-color-hover: var(--color-dodger-blue);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--theme-text);
+  background-color: var(--theme-background);
+  font-size: 15px;
+  line-height: 1.0666;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-bottom: 80px;
+}
+
+.container {
+  width: 100%;
+}
+
+.h1 {
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 600;
+  color: var(--color-white);
+  margin: 0;
+}
+
+.h2 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  color: var(--color-white);
+  margin: 0;
+}
+
+.h3 {
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--color-white);
+  margin: 0;
+}
+
+.h4 {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 500;
+  color: var(--color-white);
+  margin: 0;
+}
+
+.tableSectionWrap {
+  box-shadow: 0 32px 64px rgba(var(--rgb-cyprus), 0.08);
+  overflow: hidden;
+}
+
+@media (min-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .h2 {
+    font-size: 32px;
+    line-height: 48px;
+  }
+  .h3 {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  .h4 {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .tableSectionWrap {
+    border-radius: 8px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 0 80px;
+  }
+}

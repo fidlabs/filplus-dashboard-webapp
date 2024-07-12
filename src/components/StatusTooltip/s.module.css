@@ -1,0 +1,90 @@
+.popper {
+  background: var(--theme-area-background);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.16);
+  color: var(--theme-text);
+  padding: 16px;
+  border-radius: 8px;
+  z-index: 5;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.popper.hide {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.targetWrap {
+  display: inline-flex;
+}
+
+.target {
+  text-decoration: underline;
+  cursor: help;
+}
+
+.iconWrap {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  color: var(--theme-text-secondary);
+  margin-left: 8px;
+}
+
+.iconWrap:hover,
+.iconWrap.active {
+  color: var(--theme-text);
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.arrow[data-placement='top'] {
+  top: 100%;
+}
+
+.arrow[data-placement='bottom'] {
+  bottom: 100%;
+}
+
+.arrow:before {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+
+.arrow[data-placement='top']:before {
+  bottom: -7px;
+  border-top: 8px solid var(--theme-area-background);
+}
+
+.arrow[data-placement='bottom']:before {
+  top: -7px;
+  border-bottom: 8px solid var(--theme-area-background);
+}
+
+.statusCard {
+  margin-left: auto;
+  margin-bottom: auto;
+  height: 10px;
+  width: 10px;
+  display: block;
+  border-radius: 5px;
+}
+
+.statusCardInSync {
+  background-color: green;
+}
+
+.statusCardOutOfSync {
+  background-color: red;
+}
