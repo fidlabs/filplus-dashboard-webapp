@@ -1,30 +1,15 @@
 import cn from 'classnames';
-
 import { useFetch } from 'hooks/fetch';
 import { convertBytesToIEC } from 'utils/bytes';
-import { formatDuration } from 'utils/formatDuration';
 import { Spinner } from 'components/Spinner';
-import { Tooltip } from 'components/Tooltip';
-import { formatFixed } from '@ethersproject/bignumber';
-
 import s from './s.module.css';
-import { Sankey, Tooltip as ReTooltip } from 'recharts';
-import { getPercent } from 'utils/numbers';
-import { isArray } from 'lodash';
-import Switch from 'components/Switch';
 import { useEffect, useState } from 'react';
-import { useGlifFetch } from 'hooks/glifFetch';
-import CronStats from 'components/CronStats';
-import { StatusTooltip } from 'components/StatusTooltip';
-import { Radio } from 'components/Radio';
-import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { DataCapAllocVsAvailable } from './dataCapAllocVsAvailable';
 import { DataCapAllocationsWoW } from './dataCapAllocationsWoW';
 import { DataCapUsedOverTime } from './dataCapUsedOverTime';
 import { DataCapFlowGraph } from './dataCapFlowGraph';
-// import isFinite from 'lodash/isFinite';
 
 export default function DashboardPage() {
   const fetchUrl = '/getFilPlusStats';
@@ -33,50 +18,7 @@ export default function DashboardPage() {
   const [data, { loading, loaded }] = useFetch(fetchUrl);
 
   const {
-    totalDcStored,
-
     numberOfClients,
-    numberOfProviders,
-
-    avgTTDIn95thPercentile,
-    numberOfActiveNotaries,
-    numberOfNotaries,
-
-    activeVerifiedDealCollateral,
-    activeRegularDealCollateral,
-    totalVerifiedDealCollateral,
-    totalRegularDealCollateral,
-
-    totalAmountOfDatacapGrantedToNotaries,
-    totalAmountOfDatacapGrantedToClients,
-    totalAmountOfDatacapUsedByClients,
-    percentOfAllocatedDatacapFromTotal,
-    percentOfUsedDataFromDatacapGrantedToNotaries,
-    percentOfUsedDataFromDatacapGrantedToClients,
-
-    LDNv3totalAmountOfDatacapGrantedToNotary,
-    LDNv3totalAmountOfDatacapGrantedToClients,
-    LDNv3totalAmountOfDatacapUsedByClients,
-    LDNv3percentOfAllocatedDatacapFromTotal,
-    LDNv3percentOfUsedDataFromDatacapGrantedToClients,
-    LDNv3percentOfUsedDataFromDatacapGrantedToNotaries,
-
-    EFilTotalAmountOfDatacapGrantedToNotary,
-    EFilTotalAmountOfDatacapGrantedToClients,
-    EFiltotalAmountOfDatacapUsedByClients,
-    EFilPercentOfAllocatedDatacapFromTotal,
-    EFilPercentOfUsedDataFromDatacapGrantedToClients,
-    EFilPercentOfUsedDataFromDatacapGrantedToNotaries,
-
-    numberOfMainlyFilPlusProviders,
-    totalNumberOfProviders,
-    investmentCost,
-
-    countOfClientsWhoReceiveMoreThan100TibDatacap,
-    countOfClientsWhoUsedMoreThan90PercentOfRequestedDatacap,
-    totalNewInitialPledge,
-    sankeyChartData,
-
     numberOfActiveNotariesV2,
     numberOfAllocators,
     totalDcGivenToAllocators,

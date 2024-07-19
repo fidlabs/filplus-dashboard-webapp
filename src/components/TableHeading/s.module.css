@@ -36,9 +36,17 @@
   box-shadow: 0 2px 4px var(--color-solitude);
 }
 
+.buttonBorder.noShadow {
+  box-shadow: none;
+}
+
 .buttonBorder:hover {
   background: linear-gradient(90deg, var(--color-dodger-blue) 0%, var(--color-medium-turquoise) 100%);
   box-shadow: 0 8px 16px 0 rgba(var(--rgb-dodger-blue), 0.12);
+}
+
+.buttonBorder:hover.noShadow {
+  box-shadow: none;
 }
 
 .exportButton {
@@ -57,6 +65,11 @@
   margin: 0;
   position: relative;
   overflow: hidden;
+}
+
+.exportButton.flexContent {
+  display: flex;
+  justify-content: center;
 }
 
 .mobileSpinner {

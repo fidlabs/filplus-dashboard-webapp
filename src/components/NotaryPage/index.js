@@ -7,6 +7,10 @@ import { TableHeading } from 'components/TableHeading';
 import { TableControls } from 'components/TableControls';
 import { Table } from 'components/Table';
 import { convertBytesToIEC } from 'utils/bytes';
+import { useState } from 'react';
+import { Spinner } from '../Spinner';
+import cn from 'classnames';
+import tableHeadingStyles from '../TableHeading/s.module.css';
 
 const table = [
   {
@@ -84,13 +88,25 @@ export default function NotaryPage() {
   const fetchUrl = `/getVerifiedClients/${notaryID}`;
   const [results, { loading }] = useFetchTable(fetchUrl);
   const csvFilename = `allocator-${notaryID}.csv`;
+  const [complianceLoading, setComplianceLoading] = useState();
 
   const name = results?.name ? `, ${results.name}` : '';
   const remainingDatacap = results?.remainingDatacap
     ? convertBytesToIEC(results.remainingDatacap)
     : '';
 
-  console.log(results)
+
+  const generateComplianceReport = async () => {
+    setComplianceLoading(true);
+    const result = await api(`https://compliance.allocator.tech/report`, {
+      method: 'POST',
+      signal: abortController.signal,
+      body: JSON.stringify({ notaryID }),
+    });
+
+    console.log(result);
+    setComplianceLoading(false);
+  }
 
   return (
     <div className="container">
@@ -107,6 +123,22 @@ export default function NotaryPage() {
             ) : null}
           </>
         }
+        // additionalContent={
+        //   <div className={cn(tableHeadingStyles.buttonBorder, tableHeadingStyles.noShadow)} aria-disabled={complianceLoading}>
+        //     <button
+        //       className={cn(tableHeadingStyles.exportButton, tableHeadingStyles.flexContent)}
+        //       type="button"
+        //       disabled={complianceLoading}
+        //       style={{ minWidth: '220px'}}
+        //       onClick={generateComplianceReport}
+        //     >
+        //       <span>Compliance report</span>
+        //       {complianceLoading &&<div className={s.exportIconWrap}>
+        //         <Spinner />
+        //       </div>}
+        //     </button>
+        //   </div>
+        // }
       />
       <div className="tableSectionWrap">
         <TableHeading

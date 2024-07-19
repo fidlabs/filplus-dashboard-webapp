@@ -28,7 +28,7 @@ export const DataCapAllocationsWoW = () => {
   });
 
   return <div className={cn(s.chartWrap, s.wide)}>
-    {!!parsedData.length && <ResponsiveContainer width="100%" aspect={2} debounce={100}>
+    {!!parsedData.length && <ResponsiveContainer width="100%" aspect={2} debounce={500}>
       <LineChart
         data={parsedData}
         margin={{ top: 40, right: 50, left: 20, bottom: 20 }}
