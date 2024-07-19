@@ -24,24 +24,24 @@ export const DataCapAllocVsAvailable = ({
     }, [usedDataCap, availableDataCap]);
 
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) + 20;
+    const radius = innerRadius + (outerRadius - innerRadius);
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
     return <svg>
-      <text x={x} y={y-10} fill="black" textAnchor={x > cx ? 'start' : 'end'} style={{fontSize: 12}} dominantBaseline="central">
+      <text x={x + (50 * (!!index ? -1 : 1))} y={y-10} fill="black" textAnchor={x > cx ? 'start' : 'end'} style={{fontSize: 12}} dominantBaseline="central">
         {data[index].name}
       </text>
-      {!index && <line x1={x-50} y1={y} x2={x + 65} y2={y} stroke={palette(2, index)} />}
-      {!!index && <line x1={x-65} y1={y} x2={x + 50} y2={y} stroke={palette(2, index)} />}
-      <text x={x} y={y+10} fill="grey" textAnchor={x > cx ? 'start' : 'end'} style={{fontSize: 10, fontWeight: 300}} dominantBaseline="central">
+      {!index && <line x1={x-20} y1={y} x2={x + 105} y2={y} stroke={palette(2, index)} />}
+      {!!index && <line x1={x-105} y1={y} x2={x + 20} y2={y} stroke={palette(2, index)} />}
+      <text x={x + (70 * (!!index ? -1 : 1))} y={y+10} fill="grey" textAnchor={x > cx ? 'start' : 'end'} style={{fontSize: 10, fontWeight: 300}} dominantBaseline="central">
         {`${(percent * 100).toFixed(2)}%`}
       </text>
     </svg>
   };
 
   return <div className={cn(s.chartWrap, s.square)}>
-    {data && <ResponsiveContainer width={'100%'} aspect={1} debounce={50}>
+    {data && <ResponsiveContainer width={'100%'} aspect={1} debounce={500}>
       <PieChart>
         <Pie
           data={data}
