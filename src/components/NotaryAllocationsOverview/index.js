@@ -26,7 +26,6 @@ export default function NotaryAllocationsOverview() {
 
   const groupedByHeight = useMemo(() => {
     if (!results) return [];
-    console.log('groupedByHeight', Object.groupBy(results.data.sort((a, b) => a.createdAtHeight - b.createdAtHeight), val => val.createdAtHeight));
     return Object.groupBy(results.data.sort((a, b) => a.createdAtHeight - b.createdAtHeight), val => val.createdAtHeight);
   }, [results]);
 
@@ -41,8 +40,6 @@ export default function NotaryAllocationsOverview() {
         value: totalDatacap + valueParsed
       });
     });
-
-    console.log('newData', newData);
 
     return newData;
   }, [groupedByHeight])

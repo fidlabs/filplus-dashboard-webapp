@@ -102,12 +102,6 @@ export const DataCapUsedOverTime = () => {
     return convertBytesToIEC(value);
   }
 
-  const logScale = (value) => {
-    console.log(value);
-
-    return value;
-  }
-
   return <div className={cn(s.chartWrap, s.squareIsh, s.chartMarginBottom)}>
     {!!parsedData.length && <ResponsiveContainer width="100%" aspect={3/2} debounce={500}>
       <BarChart
