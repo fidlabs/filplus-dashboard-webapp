@@ -10,7 +10,7 @@ import { buildCompositeChildren } from '../Table/utils';
 import { Search } from '../Search';
 import classNames from 'classnames';
 
-export const TableHeading = ({ title, tabs, csv, portalRef, searchPlaceholder }) => {
+export const TableHeading = ({ title, tabs, csv, portalRef, searchPlaceholder, hideSearch, hideExport }) => {
   const [loading, setLoading] = useState(false);
 
   const handlerExport = async () => {
@@ -137,10 +137,10 @@ export const TableHeading = ({ title, tabs, csv, portalRef, searchPlaceholder })
       )}
       <div className={classNames(s.wrap, s.right)}>
 
-        <Search
+        {!hideSearch && <Search
           placeholder={searchPlaceholder}
-        />
-        <div className={s.buttonBorder} aria-disabled={!csv?.itemsCount}>
+        />}
+        {!hideExport && <div className={s.buttonBorder} aria-disabled={!csv?.itemsCount}>
           <button
             className={s.exportButton}
             type="button"
@@ -158,7 +158,7 @@ export const TableHeading = ({ title, tabs, csv, portalRef, searchPlaceholder })
               </div>
             ) : null}
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );

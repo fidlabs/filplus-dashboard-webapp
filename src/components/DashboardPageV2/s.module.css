@@ -280,7 +280,6 @@
   line-height: 16px;
   font-weight: 500;
   color: var(--theme-text-secondary);
-  margin: 0 0 16px;
 }
 
 .chartTooltipData {

@@ -9,7 +9,7 @@ import s from './s.module.css';
 
 const tooltipRoot = document.querySelector('#root-tooltip');
 
-export const Tooltip = ({ children, target, placement = 'top' }) => {
+export const Tooltip = ({ children, target, placement = 'top', cursor }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [targetRef, setTargetRef] = useState();
   const [popperRef, setPopperRef] = useState();
@@ -42,6 +42,7 @@ export const Tooltip = ({ children, target, placement = 'top' }) => {
           [s.iconWrap]: !target,
           [s.active]: showTooltip,
         })}
+        style={{ cursor }}
         tabIndex={0}
         onMouseEnter={handlerShow}
         onMouseLeave={handlerHide}
