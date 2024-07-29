@@ -15,11 +15,8 @@ const AboutPage = lazy(() => import('components/AboutPage'));
 
 const NotariesPage = lazy(() => import('components/NotariesPage'));
 const NotaryPage = lazy(() => import('components/NotaryPage'));
-const NotaryBreakdownPage = lazy(() =>
-  import('components/NotaryBreakdownPage')
-);
-const NotaryLdnActivityPage = lazy(() =>
-  import('components/NotaryLdnActivityPage')
+const NotaryAllocationsOverview = lazy(() =>
+  import('components/NotaryAllocationsOverview')
 );
 
 const LargeDataSetsPage = lazy(() => import('components/LargeDatasetsPage'));
@@ -54,13 +51,8 @@ function App() {
             <Route exact path="/notaries/:notaryID" component={NotaryPage} />
             <Route
               exact
-              path="/notaries/:notaryID/breakdown"
-              component={NotaryBreakdownPage}
-            />
-            <Route
-              exact
-              path="/notaries/:notaryID/ldn-activity"
-              component={NotaryLdnActivityPage}
+              path="/notaries/:notaryID/overview"
+              component={NotaryAllocationsOverview}
             />
             <Route exact path="/large-datasets" component={LargeDataSetsPage} />
             <Route exact path="/clients" component={ClientsPage} />

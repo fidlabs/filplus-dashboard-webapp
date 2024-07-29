@@ -60,28 +60,41 @@ const Td = ({ cell, item }) => {
     children = keysArr.reduce((acc, key) => acc[key], item);
   }
 
-  const originalChildren = children;
-
   if (linkPattern && !Array.isArray(children)) {
     const linkParam = linkPattern.split(':')[1].split('/')[0];
+
+    const parseShrinkable = () => {
+      const fullName = children;
+      let tempChildren = shortcutString(children);
+      if (fullName) {
+        tempChildren = (
+          <Tooltip target={tempChildren} cursor="pointer">
+            <div key="123" className={s.tooltipRow}>
+              {fullName}
+            </div>
+          </Tooltip>
+        );
+      }
+      return tempChildren;
+    }
 
     children = (
       <Link
         to={generatePath(linkPattern, {
           [linkParam]:
-            linkParam.split('.').reduce((acc, key) => acc[key], item) || ' ',
+          linkParam.split('.').reduce((acc, key) => acc[key], item) || ' '
         })}
         className={cn([
           s.link,
           {
             [s.highlight]: Boolean(
               query.get('highlight') &&
-                item[key]?.toString() === query.get('highlight')
-            ),
-          },
+              item[key]?.toString() === query.get('highlight')
+            )
+          }
         ])}
       >
-        {children}
+        {parseShrinkable()}
       </Link>
     );
   }
@@ -95,24 +108,24 @@ const Td = ({ cell, item }) => {
           {children.map((el) => {
             const showHighlight = Boolean(
               query.get('highlight') &&
-                Object.keys(el).some(
-                  (k) => el[k]?.toString() === query.get('highlight')
-                )
+              Object.keys(el).some(
+                (k) => el[k]?.toString() === query.get('highlight')
+              )
             );
             const link = (
               <Link
                 style={{
-                  display: showHighlight ? 'inline-block' : 'block',
+                  display: showHighlight ? 'inline-block' : 'block'
                 }}
                 key={el.timestamp}
                 to={generatePath(linkPattern, {
-                  [linkParam]: el[linkParam] || ' ',
+                  [linkParam]: el[linkParam] || ' '
                 })}
                 className={cn([
                   s.link,
                   {
-                    [s.highlight]: showHighlight,
-                  },
+                    [s.highlight]: showHighlight
+                  }
                 ])}
               >
                 {renderCallback(el)}
@@ -166,7 +179,7 @@ const Td = ({ cell, item }) => {
     children = getFormattedFIL(children);
   }
 
-  if (shrinkable) {
+  if (shrinkable && !linkPattern) {
     const fullName = children;
     children = shortcutString(children);
     if (fullName) {
@@ -181,9 +194,10 @@ const Td = ({ cell, item }) => {
   }
 
   if (tooltip && item[tooltip.key] && !tooltip.singleValue) {
+    const filter = tooltip.filterCallback ?? (() => true);
     children = (
       <Tooltip target={children}>
-        {item.allowanceArray.map((rowData) => (
+        {item[tooltip.key].filter(filter).map((rowData) => (
           <div key={rowData.id} className={s.tooltipRow}>
             {tooltip.values.map((el) => (
               <span key={el.key}>
@@ -221,8 +235,8 @@ const Td = ({ cell, item }) => {
       className={cn(s[align], {
         [s.highlight]: Boolean(
           query.get('highlight') &&
-            item[key]?.toString() === query.get('highlight')
-        ),
+          item[key]?.toString() === query.get('highlight')
+        )
       })}
       style={{ '--label': `'${cell.title}'` }}
     >
@@ -249,26 +263,26 @@ export const Table = ({ table, data = [], loading, noControls = false }) => {
       <div className={cn(s.tableWrap, { [s.loading]: loading })}>
         <table className={cn(s.table, { [s.noControls]: noControls })}>
           <thead>
-            <tr>
-              {table.map((item) => (
-                <Th key={item.key} item={item} />
-              ))}
-            </tr>
+          <tr>
+            {table.map((item) => (
+              <Th key={item.key} item={item} />
+            ))}
+          </tr>
           </thead>
           <tbody>
-            {data?.length ? (
-              data.map((item, itemIdx) => (
-                <tr key={itemIdx}>
-                  {table.map((cell, cellIdx) => (
-                    <Td key={cellIdx} cell={cell} item={item} />
-                  ))}
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={table.length}>No data</td>
+          {data?.length ? (
+            data.map((item, itemIdx) => (
+              <tr key={itemIdx}>
+                {table.map((cell, cellIdx) => (
+                  <Td key={cellIdx} cell={cell} item={item} />
+                ))}
               </tr>
-            )}
+            ))
+          ) : (
+            <tr>
+              <td colSpan={table.length}>No data</td>
+            </tr>
+          )}
           </tbody>
         </table>
         {loading ? (

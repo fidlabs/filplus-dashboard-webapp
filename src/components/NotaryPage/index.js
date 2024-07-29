@@ -11,6 +11,8 @@ import { useState } from 'react';
 import { Spinner } from '../Spinner';
 import cn from 'classnames';
 import tableHeadingStyles from '../TableHeading/s.module.css';
+import { api } from '../../utils/api';
+import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 
 const table = [
   {
@@ -25,6 +27,16 @@ const table = [
     linkPattern: '/clients/:addressId',
   },
   {
+    key: 'name',
+    title: 'Client Name',
+    sort: {
+      key: 'name',
+      ascName: 'Name Asc.',
+      descName: 'Name Desc.',
+    },
+    linkPattern: '/clients/:addressId',
+  },
+  {
     key: 'initialAllowance',
     title: 'Total DC received',
     align: 'right',
@@ -36,6 +48,7 @@ const table = [
     convertToIEC: true,
     tooltip: {
       key: 'allowanceArray',
+      filterCallback: (value, index, self) => self.findIndex(s => s.msgCID	=== value.msgCID) === index,
       values: [
         {
           key: 'verifierAddressId',
@@ -88,25 +101,12 @@ export default function NotaryPage() {
   const fetchUrl = `/getVerifiedClients/${notaryID}`;
   const [results, { loading }] = useFetchTable(fetchUrl);
   const csvFilename = `allocator-${notaryID}.csv`;
-  const [complianceLoading, setComplianceLoading] = useState();
 
   const name = results?.name ? `, ${results.name}` : '';
   const remainingDatacap = results?.remainingDatacap
     ? convertBytesToIEC(results.remainingDatacap)
     : '';
 
-
-  const generateComplianceReport = async () => {
-    setComplianceLoading(true);
-    const result = await api(`https://compliance.allocator.tech/report`, {
-      method: 'POST',
-      signal: abortController.signal,
-      body: JSON.stringify({ notaryID }),
-    });
-
-    console.log(result);
-    setComplianceLoading(false);
-  }
 
   return (
     <div className="container">
@@ -123,22 +123,7 @@ export default function NotaryPage() {
             ) : null}
           </>
         }
-        // additionalContent={
-        //   <div className={cn(tableHeadingStyles.buttonBorder, tableHeadingStyles.noShadow)} aria-disabled={complianceLoading}>
-        //     <button
-        //       className={cn(tableHeadingStyles.exportButton, tableHeadingStyles.flexContent)}
-        //       type="button"
-        //       disabled={complianceLoading}
-        //       style={{ minWidth: '220px'}}
-        //       onClick={generateComplianceReport}
-        //     >
-        //       <span>Compliance report</span>
-        //       {complianceLoading &&<div className={s.exportIconWrap}>
-        //         <Spinner />
-        //       </div>}
-        //     </button>
-        //   </div>
-        // }
+        additionalContent={<ComplianceDownloadButton id={notaryID} />}
       />
       <div className="tableSectionWrap">
         <TableHeading
@@ -147,18 +132,11 @@ export default function NotaryPage() {
               name: `${results?.count || 0} verified clients`,
               url: `/notaries/${notaryID}`,
             },
-            // {
-            //   name: 'Storage Providers breakdown',
-            //   url: `/notaries/${notaryID}/breakdown`,
-            // },
+            {
+              name: 'Allocations over time',
+              url: `/notaries/${notaryID}/overview`,
+            },
           ]}
-          searchPlaceholder="Verified Client ID / Address"
-          csv={{
-            table,
-            fetchUrl,
-            csvFilename,
-            itemsCount: results?.count || 0,
-          }}
         />
         <Table table={table} data={results.data} loading={loading} />
         <TableControls totalItems={results?.count || 0} />

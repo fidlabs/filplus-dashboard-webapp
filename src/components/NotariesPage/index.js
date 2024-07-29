@@ -13,20 +13,17 @@ const table = [
     title: 'Allocator ID',
     githubLinkKey: 'auditTrailProcessed',
     linkPattern: '/notaries/:addressId',
+    sort: {
+      key: 'addressId',
+      ascName: 'Allocator ID Asc.',
+      descName: 'Allocator ID Desc.',
+    },
   },
-  // {
-  //   key: 'composite',
-  //   title: 'Allocator Name',
-  //   shrinkable: true,
-  //   compositeOptions: {
-  //     keys: ['name', 'orgName'],
-  //     pattern: `:name - (:orgName)`,
-  //   },
-  // },
   {
     key: 'name',
     title: 'Name',
     shrinkable: true,
+    linkPattern: '/notaries/:addressId',
   },
   {
     key: 'orgName',
@@ -37,27 +34,33 @@ const table = [
     key: 'verifiedClientsCount',
     title: 'Verified Clients',
     align: 'right',
-    linkPattern: '/notaries/:addressId',
     tooltip: 'Number of SPs this client uses'
   },
   {
-    key: 'address',
-    title: 'Address',
-    canBeCopied: true,
+    key: 'allowance',
+    title: 'DataCap Available',
+    sort: {
+      key: 'allowance',
+      ascName: 'DataCap Available Asc.',
+      descName: 'DataCap Available Desc.',
+    },
+    align: 'right',
+    convertToIEC: true,
   },
   {
-    key: 'createdAtHeight',
-    title: 'Create date',
+    key: 'remainingDatacap',
+    title: 'Used DataCap',
     align: 'right',
-    convertToDate: true,
-    tooltip: {
-      key: 'createdAtHeight',
-      singleValue: true,
-    }
+    sort: {
+      key: 'remainingDatacap',
+      ascName: 'Used DataCap Asc.',
+      descName: 'Used DataCap Desc.',
+    },
+    convertToIEC: true,
   },
   {
     key: 'initialAllowance',
-    title: 'DataCap Allocated',
+    title: 'Total DataCap Received',
     sort: {
       key: 'initialAllowance',
       ascName: 'DataCap Allocated Asc.',
@@ -67,6 +70,7 @@ const table = [
     convertToIEC: true,
     tooltip: {
       key: 'allowanceArray',
+      filterCallback: (value, index, self) => self.findIndex(s => s.msgCID	=== value.msgCID) === index,
       values: [
         {
           key: 'allowance',
@@ -82,15 +86,19 @@ const table = [
     },
   },
   {
-    key: 'allowance',
-    title: 'DataCap Available',
-    sort: {
-      key: 'allowance',
-      ascName: 'DataCap Available Asc.',
-      descName: 'DataCap Available Desc.',
-    },
+    key: 'createdAtHeight',
+    title: 'Create date',
     align: 'right',
-    convertToIEC: true,
+    convertToDate: true,
+    tooltip: {
+      key: 'createdAtHeight',
+      singleValue: true,
+    }
+  },
+  {
+    key: 'address',
+    title: 'Address',
+    canBeCopied: true,
   },
 ];
 
