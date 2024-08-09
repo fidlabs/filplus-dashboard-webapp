@@ -123,7 +123,7 @@ export default function NotaryPage() {
             ) : null}
           </>
         }
-        additionalContent={<ComplianceDownloadButton id={notaryID} />}
+        additionalContent={<ComplianceDownloadButton id={results.address} />}
       />
       <div className="tableSectionWrap">
         <TableHeading

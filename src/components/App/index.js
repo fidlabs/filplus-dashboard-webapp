@@ -6,6 +6,7 @@ import { Header } from 'components/Header';
 import DashboardPageDev from 'components/DashboardPageDev';
 import ClientAllocationPage from 'components/ClientAllocationPage';
 import ClientDDODealsPage from 'components/ClientDDODealsPage';
+import { Toaster } from 'sonner';
 
 const DashboardPage = lazy(() => import('components/DashboardPage'));
 const DashboardPageV2 = lazy(() => import('components/DashboardPageV2'));
@@ -35,6 +36,9 @@ function App() {
     <>
       <Header />
       <main>
+        <Toaster position="top-right" toastOptions={{
+          duration: 2000,
+        }} />
         <Suspense
           fallback={
             <div style={{ margin: 'auto' }}>

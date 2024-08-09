@@ -3,6 +3,7 @@ import tableHeadingStyles from '../TableHeading/s.module.css';
 import { Spinner } from '../Spinner';
 import { api } from '../../utils/api';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 
 export const ComplianceDownloadButton = ({ id }) => {
@@ -14,11 +15,17 @@ export const ComplianceDownloadButton = ({ id }) => {
     setComplianceLoading(true);
     const abortController = new AbortController();
 
-    const result = await api(`https://compliance.allocator.tech/report`, {
-      method: 'POST',
-      signal: abortController.signal,
-      body: JSON.stringify({ id }),
-    });
+    try {
+      const result = await api(`https://compliance.allocator.tech/report/${id}`, {}, true);
+      if (!!result?.generatedReportUrl) {
+        window.open(result.generatedReportUrl, '_blank').focus();
+      } else {
+        toast.error('Unable to generate compliance report');
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+
 
     setComplianceLoading(false);
   }
@@ -32,7 +39,7 @@ export const ComplianceDownloadButton = ({ id }) => {
       onClick={generateComplianceReport}
     >
       <span>Compliance report</span>
-      {complianceLoading && <div className={s.exportIconWrap}>
+      {complianceLoading && <div className={tableHeadingStyles.exportIconWrap}>
         <Spinner />
       </div>}
     </button>
