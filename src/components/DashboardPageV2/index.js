@@ -3,13 +3,15 @@ import { useFetch } from 'hooks/fetch';
 import { convertBytesToIEC } from 'utils/bytes';
 import { Spinner } from 'components/Spinner';
 import s from './s.module.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { DataCapAllocVsAvailable } from './dataCapAllocVsAvailable';
 import { DataCapAllocationsWoW } from './dataCapAllocationsWoW';
 import { DataCapUsedOverTime } from './dataCapUsedOverTime';
 import { DataCapFlowGraph } from './dataCapFlowGraph';
+import { Tabs } from './tabs';
+import { DataCapFlowTree } from './dataCapFlowTree';
 
 export default function DashboardPage() {
   const fetchUrl = '/getFilPlusStats';
@@ -107,7 +109,10 @@ export default function DashboardPage() {
             </button>
           </div>
           <div className={cn(s.cardData, !toggle && s.cardDataHidden)}>
-            <DataCapFlowGraph />
+            <Tabs tabs={['Flow chart', 'Allocation tree']}>
+              <DataCapFlowGraph />
+              <DataCapFlowTree />
+            </Tabs>
           </div>
         </div>
       </div>

@@ -289,6 +289,44 @@
   color: var(--theme-text);
 }
 
+.tabs {
+  min-width: 100%;
+}
+
+.tabs > .tabsHeader {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid var(--theme-background);
+}
+
+.tabs > .tabsHeader > .tabToggle {
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: -1px;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs > .tabsHeader > .tabToggle:hover {
+  border-bottom: 2px solid var(--color-black);
+  background-color: var(--theme-background);
+}
+
+.tabs > .tabsHeader > .tabToggle.active {
+  border-bottom: 2px solid var(--color-black);
+}
+
+.tabs > .tabsContent {
+  overflow: hidden;
+}
+
+.tabs > .tabsContent > .tabsElement {
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .grid, .grid.double {
     gap: 24px;

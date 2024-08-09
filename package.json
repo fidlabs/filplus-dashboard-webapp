@@ -15,6 +15,7 @@
     "lucide-react": "^0.395.0",
     "outy": "^0.1.2",
     "react": "^17.0.1",
+    "react-d3-tree": "^3.6.2",
     "react-datepicker": "^6.8.0",
     "react-dom": "^17.0.1",
     "react-ga4": "^2.1.0",
