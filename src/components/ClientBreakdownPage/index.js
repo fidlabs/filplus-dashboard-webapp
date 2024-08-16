@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-
+import s from './s.module.css';
 import { useFetch } from 'hooks/fetch';
 
 import { PageHeading } from 'components/PageHeading';
@@ -10,6 +10,7 @@ import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
+import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 
 const table = [
   { key: 'provider', title: 'Storage Provider ID' },
@@ -48,56 +49,7 @@ export default function ClientBreakdownPage() {
       <PageHeading
         title={`Client ID: ${clientID}${name}`}
         subtitle="The page lists all the SPs used by the client"
-        searchPlaceholder=""
-        additionalContent={<div>
-          <div
-            style={{
-              width: '100%',
-              paddingBottom: '20px',
-              display: 'flex',
-              marginTop: '-20px',
-              alignItems: 'center',
-              color: 'white'
-            }}
-          >
-            Filter by time period
-          </div>
-          <div
-            style={{
-              width: '100%',
-              paddingBottom: '20px',
-              display: 'flex',
-              marginTop: '-20px',
-              alignItems: 'center',
-              color: 'white'
-            }}
-          >
-            <div style={{ paddingRight: '10px' }}>From</div>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => {
-                if (!date) return;
-                if (Math.floor(date.getTime() / 1000) < 1598306400) {
-                  return;
-                }
-                setStartDate(date);
-              }}
-              disabled={loading}
-            />
-            <div style={{ paddingLeft: '10px', paddingRight: '10px' }}>to</div>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => {
-                if (!date) return;
-                if (date > new Date()) {
-                  return;
-                }
-                setEndDate(date);
-              }}
-              disabled={loading}
-            />
-          </div>
-        </div>}
+        additionalContent={<ComplianceDownloadButton id={clientID} />}
       />
 
       <div className="tableSectionWrap">
@@ -108,7 +60,7 @@ export default function ClientBreakdownPage() {
               url: `/clients/${clientID}/ddo-deals`
             },
             {
-              name: `${data?.dealCount || 0} verified deals prior to nv 22`,
+              name: `Verified deals prior to nv 22`,
               url: `/clients/${clientID}`
             },
             {
@@ -120,6 +72,38 @@ export default function ClientBreakdownPage() {
               url: `/clients/${clientID}/allocations`
             }
           ]}
+
+          hideSearch={<div className={s.date_filters}>
+            <div className={s.entry}>
+              <label>From</label>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => {
+                  if (!date) return;
+                  if (Math.floor(date.getTime() / 1000) < 1598306400) {
+                    return;
+                  }
+                  setStartDate(date);
+                }}
+                disabled={loading}
+              />
+            </div>
+            <div className={s.entry}>
+              <label>to</label>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => {
+                  if (!date) return;
+                  if (date > new Date()) {
+                    return;
+                  }
+                  setEndDate(date);
+                }}
+                disabled={loading}
+              />
+            </div>
+          </div>}
+
           csv={{
             table,
             fetchUrl,

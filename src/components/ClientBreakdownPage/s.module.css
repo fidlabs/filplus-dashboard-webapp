@@ -1,0 +1,20 @@
+.date_filters {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.date_filters .entry {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.date_filters .entry label {
+  min-width: 5ch;
+}
+
+.date_filters .entry input {
+  outline: none !important;
+}

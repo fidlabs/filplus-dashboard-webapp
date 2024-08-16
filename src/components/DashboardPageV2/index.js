@@ -10,6 +10,7 @@ import { DataCapAllocVsAvailable } from './dataCapAllocVsAvailable';
 import { DataCapAllocationsWoW } from './dataCapAllocationsWoW';
 import { DataCapUsedOverTime } from './dataCapUsedOverTime';
 import { DataCapFlowGraph } from './dataCapFlowGraph';
+import { LoadingValue } from '../LoadingValue';
 
 export default function DashboardPage() {
   const fetchUrl = '/getFilPlusStats';
@@ -28,23 +29,23 @@ export default function DashboardPage() {
   return (
     <div className="container">
       <h2 className="h1">State of Fil+</h2>
-      <div className={cn(s.grid, s.double)}>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+      <div className="grid double">
+        <div className="card size2">
+          <div className="cardTitle">
             <span>Total Allocators Datacap</span>
           </div>
-          <div className={s.cardData}>
+          <div className="cardData">
             <LoadingValue
               value={convertBytesToIEC(totalDcGivenToAllocators)}
               loading={loading}
             />
           </div>
         </div>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+        <div className="card size2">
+          <div className="cardTitle">
             <span>Remaining Datacap Allowance</span>
           </div>
-          <div className={s.cardData}>
+          <div className="cardData">
             <LoadingValue
               value={convertBytesToIEC(
                 totalDcGivenToAllocators - totalDcUsedByAllocators
@@ -53,41 +54,41 @@ export default function DashboardPage() {
             />
           </div>
         </div>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+        <div className="card size2">
+          <div className="cardTitle">
             <span>Used Datacap Allowance</span>
           </div>
-          <div className={s.cardData}>
+          <div className="cardData">
             <LoadingValue
               value={convertBytesToIEC(totalDcUsedByAllocators)}
               loading={loading}
             />
           </div>
         </div>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+        <div className="card size2">
+          <div className="cardTitle">
             <span>Total Approved Allocators</span>
           </div>
-          <div className={s.cardData}>
+          <div className="cardData">
             <LoadingValue value={numberOfAllocators} loading={loading} />
             <Link className={s.cardLink} to="/notaries">
               Allocators <ArrowRight size={18} />
             </Link>
           </div>
         </div>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+        <div className="card size2">
+          <div className="cardTitle">
             <span>Total Active Allocators</span>
           </div>
-          <div className={s.cardData}>
+          <div className="cardData">
             <LoadingValue value={numberOfActiveNotariesV2} loading={loading} />
           </div>
         </div>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+        <div className="card size2">
+          <div className="cardTitle">
             <span>Numbers of Clients served</span>
           </div>
-          <div className={s.cardData}>
+          <div className="cardData">
             <LoadingValue value={numberOfClients} loading={loading} />
             <Link className={s.cardLink} to="/clients">
               Clients <ArrowRight size={18} />
@@ -95,9 +96,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <div className={s.grid}>
-        <div className={cn(s.card, toggle ? s.size6 : s.size4)}>
-          <div className={cn(s.cardTitle, s.noMargin)}>
+      <div className="grid">
+        <div className={cn("card", toggle ? "size6" : "size4")}>
+          <div className="cardTitle noMargin">
             <span>System Structure</span>
             <button className={s.cardButton} onClick={() => setToggle(!toggle)}>
               <ArrowRight
@@ -106,14 +107,14 @@ export default function DashboardPage() {
               />
             </button>
           </div>
-          <div className={cn(s.cardData, !toggle && s.cardDataHidden)}>
+          <div className={cn("cardData", !toggle && s.cardDataHidden)}>
             <DataCapFlowGraph />
           </div>
         </div>
       </div>
-      <div className={s.grid}>
-        <div className={cn(s.card, s.size2)}>
-          <div className={s.cardTitle}>
+      <div className="grid">
+        <div className="card size2">
+          <div className="cardTitle">
             <span>DataCap Allocation</span>
           </div>
           <DataCapAllocVsAvailable
@@ -124,16 +125,16 @@ export default function DashboardPage() {
             }
           />
         </div>
-        <div className={cn(s.card, s.size4)}>
-          <div className={s.cardTitle}>
+        <div className="card size4">
+          <div className="cardTitle">
             <span>DataCap Allocation WoW</span>
           </div>
           <DataCapAllocationsWoW />
         </div>
       </div>
-      <div className={s.grid}>
-        <div className={cn(s.card, s.size6)}>
-          <div className={s.cardTitle}>
+      <div className="grid">
+        <div className="card size6">
+          <div className="cardTitle">
             <span>DataCap Used Over Time by Allocator</span>
           </div>
           <DataCapUsedOverTime />
@@ -142,11 +143,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-const LoadingValue = ({ value, loading, spinnerSize = 24 }) => {
-  return (
-    <>
-      {loading ? <Spinner width={spinnerSize} height={spinnerSize} /> : value}
-    </>
-  );
-};

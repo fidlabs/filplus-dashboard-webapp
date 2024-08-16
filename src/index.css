@@ -110,6 +110,72 @@ main {
   overflow: hidden;
 }
 
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  margin-top: 32px;
+}
+
+.grid.double {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+  border-radius: 8px;
+  background: var(--theme-area-background);
+  box-shadow: var(--theme-area-box-shadow);
+  padding: 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease-out;
+}
+
+.size1,
+.size2,
+.size3,
+.size4,
+.size5,
+.size6 {
+  grid-column: span 1;
+}
+
+.cardTitle {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--theme-text-secondary);
+  margin: 0 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardData {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--theme-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-height: 40px;
+  margin: 0;
+  transition: all 0.3s ease-out, opacity 0.6s ease-out;
+  opacity: 1;
+}
+
+.cardData span:first-of-type {
+  margin-right: 16px;
+}
+
+.cardTitle.noMargin {
+  margin: 0;
+}
+
 @media (min-width: 480px) {
   .container {
     padding: 0 16px;
@@ -121,10 +187,12 @@ main {
     font-size: 32px;
     line-height: 48px;
   }
+
   .h3 {
     font-size: 20px;
     line-height: 24px;
   }
+
   .h4 {
     font-size: 14px;
     line-height: 24px;
@@ -132,6 +200,40 @@ main {
 
   .tableSectionWrap {
     border-radius: 8px;
+  }
+
+  .grid,
+  .grid.double {
+    gap: 24px;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .size1 {
+    grid-column: span 1;
+  }
+
+  .size2 {
+    grid-column: span 2;
+  }
+
+  .size3 {
+    grid-column: span 3;
+  }
+
+  .size4 {
+    grid-column: span 4;
+  }
+
+  .size5 {
+    grid-column: span 5;
+  }
+
+  .size6 {
+    grid-column: span 6;
+  }
+
+  .sectionTitle {
+    grid-column: span 6;
   }
 }
 

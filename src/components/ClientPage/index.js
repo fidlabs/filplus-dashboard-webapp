@@ -7,6 +7,7 @@ import { TableHeading } from 'components/TableHeading';
 import { TableControls } from 'components/TableControls';
 import { Table } from 'components/Table';
 import { convertBytesToIEC } from 'utils/bytes';
+import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 
 const table = [
   {
@@ -60,6 +61,7 @@ export default function ClientPage() {
     <div className="container">
       <PageHeading
         title={`Client ID: ${clientID}${name}`}
+        additionalContent={<ComplianceDownloadButton id={clientID} />}
         subtitle={
           <>
             The page lists all the verified clients of the allocator.
@@ -76,7 +78,6 @@ export default function ClientPage() {
             ) : null}
           </>
         }
-        searchPlaceholder="Verified Deal ID / Storage Provider ID"
       />
       <div className="tableSectionWrap">
         <TableHeading
@@ -86,7 +87,7 @@ export default function ClientPage() {
               url: `/clients/${clientID}/ddo-deals`,
             },
             {
-              name: `${results?.count || 0} verified deals prior to nv 22`,
+              name: `Verified deals prior to nv 22`,
               url: `/clients/${clientID}`,
             },
             {
@@ -98,6 +99,7 @@ export default function ClientPage() {
               url: `/clients/${clientID}/allocations`,
             },
           ]}
+          searchPlaceholder="Verified Deal ID / Storage Provider ID"
           csv={{
             directDownload: true,
             table,

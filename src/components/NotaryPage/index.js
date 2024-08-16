@@ -7,11 +7,6 @@ import { TableHeading } from 'components/TableHeading';
 import { TableControls } from 'components/TableControls';
 import { Table } from 'components/Table';
 import { convertBytesToIEC } from 'utils/bytes';
-import { useState } from 'react';
-import { Spinner } from '../Spinner';
-import cn from 'classnames';
-import tableHeadingStyles from '../TableHeading/s.module.css';
-import { api } from '../../utils/api';
 import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 
 const table = [
@@ -123,7 +118,7 @@ export default function NotaryPage() {
             ) : null}
           </>
         }
-        additionalContent={<ComplianceDownloadButton id={results.address} />}
+        additionalContent={<ComplianceDownloadButton id={results.addressId} />}
       />
       <div className="tableSectionWrap">
         <TableHeading

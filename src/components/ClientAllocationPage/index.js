@@ -6,6 +6,7 @@ import { PageHeading } from 'components/PageHeading';
 import { TableHeading } from 'components/TableHeading';
 // import { TableControls } from 'components/TableControls';
 import { Table } from 'components/Table';
+import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 
 const table = [
   {
@@ -71,8 +72,8 @@ export default function ClientAllocationPage() {
     <div className="container">
       <PageHeading
         title={`Client ID: ${clientID}${name}`}
+        additionalContent={<ComplianceDownloadButton id={clientID} />}
         subtitle="The page lists all the allocations received by the client"
-        searchPlaceholder=""
       />
       <div className="tableSectionWrap">
         <TableHeading
@@ -82,7 +83,7 @@ export default function ClientAllocationPage() {
               url: `/clients/${clientID}/ddo-deals`,
             },
             {
-              name: `${data?.dealCount || 0} verified deals prior to nv 22`,
+              name: `Verified deals prior to nv 22`,
               url: `/clients/${clientID}`,
             },
             {
@@ -94,6 +95,7 @@ export default function ClientAllocationPage() {
               url: `/clients/${clientID}/allocations`,
             },
           ]}
+          hideSearch
           csv={{
             table,
             fetchUrl,
@@ -110,7 +112,7 @@ export default function ClientAllocationPage() {
       </div>
       <br />
       <div className="tableSectionWrap">
-        <TableHeading title="Total size per allocator" />
+        <TableHeading title="Total size per allocator" hideSearch />
         <Table
           table={totalTable}
           data={totalPerVerifierArray}

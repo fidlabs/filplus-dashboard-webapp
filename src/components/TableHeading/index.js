@@ -140,6 +140,9 @@ export const TableHeading = ({ title, tabs, csv, portalRef, searchPlaceholder, h
         {!hideSearch && <Search
           placeholder={searchPlaceholder}
         />}
+        {
+          typeof hideSearch !== 'boolean' && hideSearch
+        }
         {!hideExport && <div className={s.buttonBorder} aria-disabled={!csv?.itemsCount}>
           <button
             className={s.exportButton}
