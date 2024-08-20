@@ -4,7 +4,6 @@ import { useFetch } from 'hooks/fetch';
 
 import { PageHeading } from 'components/PageHeading';
 import { TableHeading } from 'components/TableHeading';
-// import { TableControls } from 'components/TableControls';
 import { Table } from 'components/Table';
 import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 import { useMemo, useState } from 'react';
@@ -12,8 +11,6 @@ import { Area, Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, T
 import { convertBytesToIEC } from '../../utils/bytes';
 import { calculateDateFromHeight } from '../../utils/height';
 import s from '../DashboardPageV2/s.module.css';
-import { palette } from '../../utils/colors';
-import { scaleSymlog } from 'd3-scale';
 import { ContentTabs } from '../ContentTabs';
 
 const table = [
@@ -31,7 +28,8 @@ const table = [
   {
     key: 'height',
     title: 'Height',
-    align: 'right'
+    align: 'right',
+    convertToDate: true
   }
 ];
 
@@ -109,8 +107,6 @@ export default function ClientAllocationPage() {
         totalAllowance: returnData.reduce((acc, cur) => acc + +cur.allowance, 0) + +item.allowance
       });
     });
-
-    console.log(returnData);
 
     return returnData;
 

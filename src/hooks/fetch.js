@@ -79,6 +79,7 @@ const defaultState = {
   results: {},
   loading: false,
   loaded: false,
+  error: undefined
 };
 
 export const useFetch = (url) => {
@@ -105,6 +106,7 @@ export const useFetch = (url) => {
         setData({
           ...defaultState,
           loaded: true,
+          error: e.statusCode ?? 500
         });
       });
 
@@ -113,5 +115,5 @@ export const useFetch = (url) => {
     };
   }, [url]);
 
-  return [data.results, { loading: data.loading, loaded: data.loaded }];
+  return [data.results, { loading: data.loading, loaded: data.loaded, error: data.error }];
 };

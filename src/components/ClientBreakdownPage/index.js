@@ -12,6 +12,7 @@ import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
 import { palette } from '../../utils/colors';
 import { convertBytesToIEC } from '../../utils/bytes';
+import { value } from 'lodash/seq';
 
 const table = [
   { key: 'provider', title: 'Storage Provider ID' },
@@ -81,13 +82,13 @@ export default function ClientBreakdownPage() {
   const auxEndDate = new Date();
   const auxStartDate = new Date(new Date().setDate(auxEndDate.getDate() - 30));
 
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0);
   const [startDate, setStartDate] = useState(auxStartDate);
   const [endDate, setEndDate] = useState(auxEndDate);
   const fetchUrl = `/getDealAllocationStats/${clientID}?startDate=${
     startDate.toISOString().split('T')[0]
   }&endDate=${endDate.toISOString().split('T')[0]}`;
-  const [data, { loading }] = useFetch(fetchUrl);
+  const [data, { loading, error }] = useFetch(fetchUrl);
   const csvFilename = `client-${clientID}-stats.csv`;
 
   const name = data?.name ? `, ${data.name}` : '';
@@ -98,7 +99,7 @@ export default function ClientBreakdownPage() {
 
   const chartData = useMemo(() => {
     if (!data?.stats?.length) {
-      return []
+      return [];
     }
 
     return data?.stats?.map((item) => ({
@@ -176,32 +177,40 @@ export default function ClientBreakdownPage() {
             itemsCount: data?.stats?.length || 0
           }}
         />
-        {chartData && <ResponsiveContainer width={'100%'} aspect={1.5} debounce={500} style={{
-          backgroundColor: '#fff',
+        <div style={{
+          backgroundColor: '#fff'
         }}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              // label={renderCustomizedLabel}
-              outerRadius={'50%'}
-              innerRadius={'35%'}
-              fill="#8884d8"
-              dataKey="value"
-              activeIndex={activeIndex}
-              activeShape={renderActiveShape}
-              onMouseEnter={onPieEnter}
-              onClick={console.log}
-              paddingAngle={1}
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>}
+          {
+            error && <div style={{padding: '2em'}}>
+              Unable to prepare data
+            </div>
+          }
+          {chartData && <ResponsiveContainer width={'100%'} aspect={1.5} debounce={500}>
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius={'50%'}
+                innerRadius={'35%'}
+                fill="#8884d8"
+                dataKey="value"
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape}
+                onMouseEnter={onPieEnter}
+                paddingAngle={1}
+                onClick={(val) => {
+                  window.open(`/storage-providers/${val.name}`, '_blank');
+                }}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} cursor="pointer" />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>}
+        </div>
       </div>
     </div>
   );
