@@ -1,11 +1,53 @@
 import s from './s.module.css';
-import { Cell, Pie, ResponsiveContainer, PieChart } from 'recharts';
+import { Cell, Pie, ResponsiveContainer, PieChart, Sector } from 'recharts';
 import { palette } from '../../utils/colors';
 import { useMemo } from 'react';
 import { convertBytesToIEC } from '../../utils/bytes';
 import cn from 'classnames';
 
-const RADIAN = Math.PI / 180;
+const renderActiveShape = (props) => {
+  const RADIAN = Math.PI / 180;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
+  const sin = Math.sin(-RADIAN * midAngle);
+  const cos = Math.cos(-RADIAN * midAngle);
+  const sx = cx + (outerRadius + 10) * cos;
+  const sy = cy + (outerRadius + 10) * sin;
+  const mx = cx + (outerRadius + 30) * cos;
+  const my = cy + (outerRadius + 30) * sin;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ey = my;
+  const textAnchor = cos >= 0 ? 'start' : 'end';
+
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={outerRadius + 6}
+        outerRadius={outerRadius + 10}
+        fill={fill}
+      />
+      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
+      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{payload.name}</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        {`${convertBytesToIEC(value)} (${payload.percent.toFixed(2)}%)`}
+      </text>
+    </g>
+  );
+};
+
 
 export const DataCapAllocVsAvailable = ({
                                           totalDataCap, usedDataCap, availableDataCap
@@ -18,27 +60,10 @@ export const DataCapAllocVsAvailable = ({
         return undefined;
       }
       return [
-        { name: 'Allocated', value: usedDataCapNum },
-        { name: 'Available', value: availableDataCapNum }
+        { name: 'Allocated', value: usedDataCapNum, percent: usedDataCapNum / totalDataCap * 100 },
+        { name: 'Available', value: availableDataCapNum, percent: availableDataCapNum / totalDataCap * 100 }
       ];
     }, [usedDataCap, availableDataCap]);
-
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radius = innerRadius + (outerRadius - innerRadius);
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return <svg>
-      <text x={x + (50 * (!!index ? -1 : 1))} y={y-10} fill="black" textAnchor={x > cx ? 'start' : 'end'} style={{fontSize: 12}} dominantBaseline="central">
-        {data[index].name}
-      </text>
-      {!index && <line x1={x-20} y1={y} x2={x + 105} y2={y} stroke={palette(2, index)} />}
-      {!!index && <line x1={x-105} y1={y} x2={x + 20} y2={y} stroke={palette(2, index)} />}
-      <text x={x + (70 * (!!index ? -1 : 1))} y={y+10} fill="grey" textAnchor={x > cx ? 'start' : 'end'} style={{fontSize: 10, fontWeight: 300}} dominantBaseline="central">
-        {`${(percent * 100).toFixed(2)}%`}
-      </text>
-    </svg>
-  };
 
   return <div className={cn(s.chartWrap, s.square)}>
     {data && <ResponsiveContainer width={'100%'} aspect={1} debounce={500}>
@@ -47,11 +72,13 @@ export const DataCapAllocVsAvailable = ({
           data={data}
           cx="50%"
           cy="50%"
-          labelLine={false}
-          label={renderCustomizedLabel}
           outerRadius={'50%'}
+          innerRadius={'35%'}
           fill="#8884d8"
           dataKey="value"
+          activeIndex={[0, 1]}
+          activeShape={renderActiveShape}
+          paddingAngle={3}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={palette(2, index)} />

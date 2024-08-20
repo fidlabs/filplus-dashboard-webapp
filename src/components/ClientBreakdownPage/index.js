@@ -4,13 +4,14 @@ import { useFetch } from 'hooks/fetch';
 
 import { PageHeading } from 'components/PageHeading';
 import { TableHeading } from 'components/TableHeading';
-// import { TableControls } from 'components/TableControls';
-import { Table } from 'components/Table';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ComplianceDownloadButton } from '../ComplianceDownloadButton';
+import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+import { palette } from '../../utils/colors';
+import { convertBytesToIEC } from '../../utils/bytes';
 
 const table = [
   { key: 'provider', title: 'Storage Provider ID' },
@@ -28,12 +29,59 @@ const table = [
   }
 ];
 
+const renderActiveShape = (props) => {
+  const RADIAN = Math.PI / 180;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
+  const sin = Math.sin(-RADIAN * midAngle);
+  const cos = Math.cos(-RADIAN * midAngle);
+  const sx = cx + (outerRadius + 10) * cos;
+  const sy = cy + (outerRadius + 10) * sin;
+  const mx = cx + (outerRadius + 30) * cos;
+  const my = cy + (outerRadius + 30) * sin;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ey = my;
+  const textAnchor = cos >= 0 ? 'start' : 'end';
+
+  return (
+    <g>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+        {payload.name}
+      </text>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={outerRadius + 6}
+        outerRadius={outerRadius + 10}
+        fill={fill}
+      />
+      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
+      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value}%`}</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        {payload.totalSize}
+      </text>
+    </g>
+  );
+};
+
 export default function ClientBreakdownPage() {
   const { clientID } = useParams();
 
   const auxEndDate = new Date();
   const auxStartDate = new Date(new Date().setDate(auxEndDate.getDate() - 30));
 
+  const [activeIndex, setActiveIndex] = useState(0)
   const [startDate, setStartDate] = useState(auxStartDate);
   const [endDate, setEndDate] = useState(auxEndDate);
   const fetchUrl = `/getDealAllocationStats/${clientID}?startDate=${
@@ -43,6 +91,23 @@ export default function ClientBreakdownPage() {
   const csvFilename = `client-${clientID}-stats.csv`;
 
   const name = data?.name ? `, ${data.name}` : '';
+
+  const onPieEnter = (_, index) => {
+    setActiveIndex(index);
+  };
+
+  const chartData = useMemo(() => {
+    if (!data?.stats?.length) {
+      return []
+    }
+
+    return data?.stats?.map((item) => ({
+      name: item.provider,
+      value: +item.percent,
+      totalSize: convertBytesToIEC(item.total_deal_size)
+    }));
+
+  }, [data]);
 
   return (
     <div className="container">
@@ -111,8 +176,32 @@ export default function ClientBreakdownPage() {
             itemsCount: data?.stats?.length || 0
           }}
         />
-        <Table table={table} data={data?.stats} loading={loading} noControls />
-        {/*<TableControls totalItems={data?.stats?.length || 0} />*/}
+        {chartData && <ResponsiveContainer width={'100%'} aspect={1.5} debounce={500} style={{
+          backgroundColor: '#fff',
+        }}>
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              // label={renderCustomizedLabel}
+              outerRadius={'50%'}
+              innerRadius={'35%'}
+              fill="#8884d8"
+              dataKey="value"
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              onMouseEnter={onPieEnter}
+              onClick={console.log}
+              paddingAngle={1}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>}
       </div>
     </div>
   );
