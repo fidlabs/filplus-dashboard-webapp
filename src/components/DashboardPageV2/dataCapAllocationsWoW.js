@@ -24,7 +24,6 @@ export const DataCapAllocationsWoW = () => {
         });
       });
     }
-    console.log('normalData', normalData);
     return normalData;
   });
 

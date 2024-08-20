@@ -1,3 +1,50 @@
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  margin-top: 32px;
+}
+
+.grid.double {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+  border-radius: 8px;
+  background: var(--theme-area-background);
+  box-shadow: var(--theme-area-box-shadow);
+  padding: 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease-out;
+}
+
+.size1,
+.size2,
+.size3,
+.size4,
+.size5,
+.size6 {
+  grid-column: span 1;
+}
+
+.cardTitle {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--theme-text-secondary);
+  margin: 0 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardTitle.noMargin {
+  margin: 0;
+}
+
 .chartHeader {
   display: flex;
   align-items: center;
@@ -46,6 +93,21 @@
   line-height: 16px;
   font-weight: 500;
   color: var(--theme-text-secondary);
+}
+
+.cardData {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--theme-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-height: 40px;
+  margin: 0;
+  transition: all 0.3s ease-out, opacity 0.6s ease-out;
+  opacity: 1;
 }
 
 .cardDataHidden {
@@ -109,6 +171,10 @@
 
 .cardLink:hover > svg {
   transform: translateX(8px);
+}
+
+.cardData span:first-of-type {
+  margin-right: 16px;
 }
 
 .backLink > svg {
@@ -221,6 +287,74 @@
   line-height: 20px;
   font-weight: 500;
   color: var(--theme-text);
+}
+
+.tabs {
+  min-width: 100%;
+}
+
+.tabs > .tabsHeader {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid var(--theme-background);
+}
+
+.tabs > .tabsHeader > .tabToggle {
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: -1px;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs > .tabsHeader > .tabToggle:hover {
+  border-bottom: 2px solid var(--color-black);
+  background-color: var(--theme-background);
+}
+
+.tabs > .tabsHeader > .tabToggle.active {
+  border-bottom: 2px solid var(--color-black);
+}
+
+.tabs > .tabsContent {
+  overflow: hidden;
+}
+
+.tabs > .tabsContent > .tabsElement {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .grid, .grid.double {
+    gap: 24px;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .size1 {
+    grid-column: span 1;
+  }
+  .size2 {
+    grid-column: span 2;
+  }
+  .size3 {
+    grid-column: span 3;
+  }
+  .size4 {
+    grid-column: span 4;
+  }
+  .size5 {
+    grid-column: span 5;
+  }
+  .size6 {
+    grid-column: span 6;
+  }
+
+  .sectionTitle {
+    grid-column: span 6;
+  }
 }
 
 .toggleSwitch {
