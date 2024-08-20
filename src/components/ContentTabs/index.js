@@ -2,7 +2,7 @@ import s from './s.module.css';
 import cn from 'classnames';
 import {Children, cloneElement, useState } from 'react';
 
-export const Tabs = ({children, tabs}) => {
+export const ContentTabs = ({children, tabs}) => {
 
   const [currentTab, setCurrentTab] = useState(0);
 

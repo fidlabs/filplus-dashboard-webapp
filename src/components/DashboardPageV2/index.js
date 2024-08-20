@@ -1,7 +1,6 @@
 import cn from 'classnames';
 import { useFetch } from 'hooks/fetch';
 import { convertBytesToIEC } from 'utils/bytes';
-import { Spinner } from 'components/Spinner';
 import s from './s.module.css';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -10,9 +9,9 @@ import { DataCapAllocVsAvailable } from './dataCapAllocVsAvailable';
 import { DataCapAllocationsWoW } from './dataCapAllocationsWoW';
 import { DataCapUsedOverTime } from './dataCapUsedOverTime';
 import { DataCapFlowGraph } from './dataCapFlowGraph';
-import { Tabs } from './tabs';
 import { DataCapFlowTree } from './dataCapFlowTree';
 import { LoadingValue } from '../LoadingValue';
+import { ContentTabs } from '../ContentTabs';
 
 export default function DashboardPage() {
   const fetchUrl = '/getFilPlusStats';
@@ -110,10 +109,13 @@ export default function DashboardPage() {
             </button>
           </div>
           <div className={cn(s.cardData, !toggle && s.cardDataHidden)}>
-            <Tabs tabs={['Flow chart', 'Allocation tree']}>
+            <ContentTabs tabs={['Flow chart', 'Allocation tree']}>
               <DataCapFlowGraph />
-              <DataCapFlowTree />
-            </Tabs>
+              <div style={{padding: '2em'}}>
+                Coming soon...
+              </div>
+              {/*<DataCapFlowTree />*/}
+            </ContentTabs>
           </div>
         </div>
       </div>

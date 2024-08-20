@@ -14,38 +14,39 @@ import { calculateDateFromHeight } from '../../utils/height';
 import s from '../DashboardPageV2/s.module.css';
 import { palette } from '../../utils/colors';
 import { scaleSymlog } from 'd3-scale';
+import { ContentTabs } from '../ContentTabs';
 
 const table = [
   {
     key: 'verifierAddressId',
     title: 'Allocator ID',
-    linkPattern: '/notaries/:verifierAddressId',
+    linkPattern: '/notaries/:verifierAddressId'
   },
   {
     key: 'allowance',
     title: 'Total size',
     align: 'right',
-    convertToIEC: true,
+    convertToIEC: true
   },
   {
     key: 'height',
     title: 'Height',
-    align: 'right',
-  },
+    align: 'right'
+  }
 ];
 
 const totalTable = [
   {
     key: 'verifierAddressId',
     title: 'Allocator ID',
-    linkPattern: '/notaries/:verifierAddressId',
+    linkPattern: '/notaries/:verifierAddressId'
   },
   {
     key: 'allowance',
     title: 'Total size',
     align: 'right',
-    convertToIEC: true,
-  },
+    convertToIEC: true
+  }
 ];
 
 export default function ClientAllocationPage() {
@@ -66,7 +67,7 @@ export default function ClientAllocationPage() {
     for (const verifierAddressId in totalPerVerifier) {
       totalPerVerifierArray.push({
         verifierAddressId,
-        allowance: totalPerVerifier[verifierAddressId],
+        allowance: totalPerVerifier[verifierAddressId]
       });
     }
   }
@@ -104,14 +105,14 @@ export default function ClientAllocationPage() {
         verifierAddressId: item.verifierAddressId,
         allowance: +item.allowance,
         height: item.height,
-        auditTrail	: item.auditTrail	,
-        totalAllowance: returnData.reduce((acc, cur) => acc + +cur.allowance, 0) + +item.allowance,
+        auditTrail: item.auditTrail,
+        totalAllowance: returnData.reduce((acc, cur) => acc + +cur.allowance, 0) + +item.allowance
       });
     });
 
     console.log(returnData);
 
-    return returnData
+    return returnData;
 
   }, [data]);
 
@@ -127,52 +128,64 @@ export default function ClientAllocationPage() {
           tabs={[
             {
               name: 'DC claims',
-              url: `/clients/${clientID}/ddo-deals`,
+              url: `/clients/${clientID}/ddo-deals`
             },
             {
               name: `Verified deals prior to nv 22`,
-              url: `/clients/${clientID}`,
+              url: `/clients/${clientID}`
             },
             {
               name: 'Storage Providers breakdown',
-              url: `/clients/${clientID}/breakdown`,
+              url: `/clients/${clientID}/breakdown`
             },
             {
               name: 'Allocations breakdown',
-              url: `/clients/${clientID}/allocations`,
-            },
+              url: `/clients/${clientID}/allocations`
+            }
           ]}
           hideSearch
           csv={{
             table,
             fetchUrl,
             csvFilename,
-            itemsCount: data.data?.[0]?.allowanceArray?.length || 0,
+            itemsCount: data.data?.[0]?.allowanceArray?.length || 0
           }}
         />
-        {chartData && <ResponsiveContainer width="100%" height="100%" aspect={1.5} debounce={500} style={{
-          backgroundColor: 'white',
+        <div style={{
+          backgroundColor: 'white'
         }}>
-          <ComposedChart
-            width={500}
-            height={400}
-            data={chartData}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="height" tickFormatter={(value) => calculateDateFromHeight(value)}/>
-            <YAxis tickFormatter={(value) => convertBytesToIEC(value)} />
-            <Tooltip content={renderTooltip}/>
-            <Legend />
-            <Area type="monotone" dataKey="totalAllowance" fill="#8884d8" stroke="#8884d8" />
-            <Bar dataKey="allowance" barSize={50} fill="#413ea0"  />
-          </ComposedChart>
-        </ResponsiveContainer>}
+          <ContentTabs tabs={['Table view', 'Chart view']}>
+            <Table
+              table={table}
+              data={data.data?.[0]?.allowanceArray}
+              loading={loading}
+              noControls
+            />
+            <div>
+              {chartData && <ResponsiveContainer width="100%" height="100%" aspect={1.5} debounce={500}>
+                <ComposedChart
+                  width={500}
+                  height={400}
+                  data={chartData}
+                  margin={{
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20
+                  }}
+                >
+                  <CartesianGrid stroke="#f5f5f5" />
+                  <XAxis dataKey="height" tickFormatter={(value) => calculateDateFromHeight(value)} />
+                  <YAxis tickFormatter={(value) => convertBytesToIEC(value)} />
+                  <Tooltip content={renderTooltip} />
+                  <Legend />
+                  <Area type="monotone" dataKey="totalAllowance" fill="#8884d8" stroke="#8884d8" />
+                  <Bar dataKey="allowance" barSize={50} fill="#413ea0" />
+                </ComposedChart>
+              </ResponsiveContainer>}
+            </div>
+          </ContentTabs>
+        </div>
       </div>
       <br />
       <div className="tableSectionWrap">
