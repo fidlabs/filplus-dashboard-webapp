@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useFetch } from 'hooks/fetch';
 import { convertBytesToIEC } from 'utils/bytes';
 import s from './s.module.css';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { DataCapAllocVsAvailable } from './dataCapAllocVsAvailable';
@@ -12,10 +12,12 @@ import { DataCapFlowGraph } from './dataCapFlowGraph';
 import { DataCapFlowTree } from './dataCapFlowTree';
 import { LoadingValue } from '../LoadingValue';
 import { ContentTabs } from '../ContentTabs';
+import { useScrollToHash } from '../../hooks/useScrollToHash';
 
 export default function DashboardPage() {
   const fetchUrl = '/getFilPlusStats';
   const [toggle, setToggle] = useState(false);
+  const scrollToHash = useScrollToHash();
 
   const [data, { loading, loaded }] = useFetch(fetchUrl);
 
@@ -24,8 +26,15 @@ export default function DashboardPage() {
     numberOfActiveNotariesV2,
     numberOfAllocators,
     totalDcGivenToAllocators,
-    totalDcUsedByAllocators,
+    totalDcUsedByAllocators
   } = data;
+
+  const toggleChartsWrapper = useCallback(() => {
+    if (!toggle) {
+      scrollToHash('chartsWrapper');
+    }
+    setToggle(!toggle);
+  }, [toggle, scrollToHash]);
 
   return (
     <div className="container">
@@ -98,10 +107,10 @@ export default function DashboardPage() {
         </div>
       </div>
       <div className="grid">
-        <div className={cn("card", toggle ? "size6" : "size4")}>
+        <div id="chartsWrapper" className={cn('card', toggle ? 'size6' : 'size4')}>
           <div className="cardTitle noMargin">
             <span>System Structure</span>
-            <button className={s.cardButton} onClick={() => setToggle(!toggle)}>
+            <button className={s.cardButton} onClick={toggleChartsWrapper}>
               <ArrowRight
                 size={18}
                 style={{ transform: toggle ? 'rotate(90deg' : '' }}
@@ -109,12 +118,9 @@ export default function DashboardPage() {
             </button>
           </div>
           <div className={cn(s.cardData, !toggle && s.cardDataHidden)}>
-            <ContentTabs tabs={['Flow chart', 'Allocation tree']}>
+            <ContentTabs tabs={['Allocators tree', 'DataCap flow']}>
+              <DataCapFlowTree />
               <DataCapFlowGraph />
-              <div style={{padding: '2em'}}>
-                Coming soon...
-              </div>
-              {/*<DataCapFlowTree />*/}
             </ContentTabs>
           </div>
         </div>

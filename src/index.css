@@ -244,3 +244,10 @@ main {
     padding: 0 80px;
   }
 }
+
+.rd3t-leaf-node {
+  cursor: pointer;
+  fill: var(--color-dodger-blue) !important;
+  stroke: #000;
+  stroke-width: 1;
+}

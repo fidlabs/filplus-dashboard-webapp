@@ -1,7 +1,5 @@
 import { useParams } from 'react-router-dom';
-
 import { useFetch } from 'hooks/fetch';
-
 import { PageHeading } from 'components/PageHeading';
 import { TableHeading } from 'components/TableHeading';
 import { Table } from 'components/Table';

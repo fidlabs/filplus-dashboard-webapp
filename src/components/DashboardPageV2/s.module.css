@@ -339,3 +339,43 @@
 .statusCardOutOfSync {
   background-color: red;
 }
+
+.treeLabelNode {
+  fill: var(--color-medium-turquoise);
+  stroke: var(--color-dodger-blue);
+  stroke-width: 1;
+}
+
+.treeLabelNodeLeaf {
+  fill: var(--color-white);
+  stroke: var(--color-dodger-blue);
+  stroke-width: 1;
+}
+
+.treeLabelTitle {
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 300;
+  fill: var(--color-black);
+  margin: 0;
+  stroke-width: 0.5;
+}
+
+.treeLabelTitleHoverable {
+  cursor: pointer;
+  stroke-width: 0.4;
+  fill: var(--color-mountain-meadow);
+}
+
+.treeLabelTitleHoverable:hover {
+  text-decoration: underline;
+}
+
+.treeLabelInfo {
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 300;
+  fill: var(--color-dodger-blue);
+  margin: 0;
+  stroke-width: 0.3;
+}

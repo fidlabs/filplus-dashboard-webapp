@@ -112,7 +112,6 @@ export const DataCapFlowGraph = () => {
       });
       skData = {...skData, ...sankeyLevel2(allocators, dc)};
     })
-
     return skData;
   }
 
