@@ -1,7 +1,6 @@
 import useCDP from '../../../hooks/useCDP';
-import { useMemo, useState } from 'react';
-
-const tabs = ['3 bars', '6 bars', 'All']
+import { useEffect, useMemo, useState } from 'react';
+import { useCommonChart } from '../providers/CommonChartProvider';
 
 const useChartData = (data, unit = '') => {
   const {
@@ -10,10 +9,14 @@ const useChartData = (data, unit = '') => {
     parseBucketGroup,
   } = useCDP()
 
+  const {
+    barTabs, globalBarTab
+  } = useCommonChart()
+
   const [currentTab, setCurrentTab] = useState(0)
 
   const chartData = useMemo(() => {
-    if (currentTab === tabs.length - 1) {
+    if (currentTab === barTabs.length - 1) {
       return data.map((bucket, index) => parseSingleBucket(bucket, index, data?.length, unit));
     } else {
       const groupedBuckets = groupData(data, currentTab * 3 + 3);
@@ -21,11 +24,15 @@ const useChartData = (data, unit = '') => {
     }
   }, [data, currentTab]);
 
+  useEffect(() => {
+    setCurrentTab(globalBarTab)
+  }, [globalBarTab]);
+
   return {
     chartData,
     currentTab,
     setCurrentTab,
-    tabs
+    tabs: barTabs
   }
 }
 

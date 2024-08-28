@@ -4,22 +4,26 @@
 
 .tabsHeader {
   width: min-content;
+  min-width: 200px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   background: var(--theme-background);
   border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
   box-shadow: var(--theme-area-box-shadow-inset);
 }
 
 .tabsHeader > .tabToggle {
-  padding: 4px 12px;
+  padding: 4px 10px;
   cursor: pointer;
   font-weight: 500;
   font-size: 14px;
   white-space: nowrap;
-  margin: 4px;
   border-radius: 4px;
+  min-width: 55px;
+  text-align: center;
 }
 
 .tabsHeader > .tabToggle.active {

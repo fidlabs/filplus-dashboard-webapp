@@ -1,41 +1,37 @@
-import useCDP from '../../hooks/useCDP';
+import useCDP from '../../../hooks/useCDP';
 import { useEffect, useState } from 'react';
-import s from './s.module.css'
-import TabsSelector from '../ContentTabs/TabsSelector';
+import s from '../s.module.css'
+import TabsSelector from '../../ContentTabs/TabsSelector';
 import BarGraph from './BarGraph';
-import useScrollObserver from '../../hooks/useScrollObserver';
-import useChartData from './hooks/useChartData';
-import useChartScale from './hooks/useChartScale';
+import useScrollObserver from '../../../hooks/useScrollObserver';
+import useChartData from '../hooks/useChartData';
+import useChartScale from '../hooks/useChartScale';
 import ScaleTabs from './ScaleTabs';
 
+const tabs = ['3 bars', '6 bars', 'All']
 
-const NumberOfDealsSP = ({setCurrentElement}) => {
+const BiggestDealsSP = ({setCurrentElement}) => {
   const {
-    getNumberOfDealsSP,
-  } = useCDP()
+    data, isLoading
+  } = useCDP().getSizeOfTheBiggestDealSP()
 
   const { top, ref } = useScrollObserver();
 
-  const [numberOfDeals, setNumberOfDeals] = useState(null);
-  const { chartData, currentTab, setCurrentTab, tabs } = useChartData(numberOfDeals?.buckets, ' deals')
+  const { chartData, currentTab, setCurrentTab, tabs } = useChartData(data?.buckets, '%')
   const { scale, selectedScale, setSelectedScale } = useChartScale(chartData)
 
   useEffect(() => {
-      getNumberOfDealsSP().then(setNumberOfDeals);
-  }, []);
-
-  useEffect(() => {
-    if (top > 0 && top < 200) {
-      setCurrentElement("NumberOfDealsSP");
+    if (top > 0 && top < 300) {
+      setCurrentElement("BiggestDealsSP");
     }
   }, [top]);
 
 
-  return <div className="size6 w-full" id="NumberOfDealsSP" ref={ref}>
+  return <div className="size6 w-full" id="BiggestDealsSP" ref={ref}>
     <div className="card">
       <div className="cardTitle noMargin">
         <div className={s.chartHeader}>
-          <div>Number Of Deals</div>
+          <div>Size Of The Biggest Deal</div>
           <div className={s.chartHeaderOptions}>
             <ScaleTabs scale={selectedScale} setScale={setSelectedScale} />
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
@@ -49,11 +45,11 @@ const NumberOfDealsSP = ({setCurrentElement}) => {
               Total providers
             </div>
             <div className="cardData">
-              {numberOfDeals?.count}
+              {data?.count}
             </div>
           </div>
           <div className="size6">
-            <BarGraph data={chartData} scale={scale}/>
+            <BarGraph data={chartData} scale={scale} isLoading={isLoading}/>
           </div>
         </div>
 
@@ -63,4 +59,4 @@ const NumberOfDealsSP = ({setCurrentElement}) => {
 
 }
 
-export default NumberOfDealsSP;
+export default BiggestDealsSP;
