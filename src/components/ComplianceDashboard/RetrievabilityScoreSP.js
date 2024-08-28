@@ -10,7 +10,7 @@ import useChartScale from './hooks/useChartScale';
 
 const RetrievabilityScoreSP = ({setCurrentElement}) => {
   const {
-    getRetrievability,
+    getRetrievabilitySP,
   } = useCDP()
 
   const [retrievability, setRetrievability] = useState(null)
@@ -19,7 +19,7 @@ const RetrievabilityScoreSP = ({setCurrentElement}) => {
   const { scale, selectedScale, setSelectedScale } = useChartScale(chartData)
 
   useEffect(() => {
-    getRetrievability().then(setRetrievability);
+    getRetrievabilitySP().then(setRetrievability);
   }, []);
 
   useEffect(() => {

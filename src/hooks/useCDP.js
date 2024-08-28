@@ -5,7 +5,7 @@ const CPD_API = `https://compliance.allocator.tech`;
 
 const useCDP = () => {
 
-  const getRetrievability = useCallback(async () => {
+  const getRetrievabilitySP = useCallback(async () => {
     const data = await api(`${CPD_API}/stats/providers/retrievability`, {}, true);
     return {
       avg_success_rate_pct: data?.avg_success_rate_pct,
@@ -14,7 +14,16 @@ const useCDP = () => {
     };
   }, []);
 
-  const getNumberOfDeals = useCallback(async () => {
+  const getRetrievabilityAllocator = useCallback(async () => {
+    const data = await api(`${CPD_API}/stats/allocators/retrievability`, {}, true);
+    return {
+      avg_score: data?.avg_score,
+      count: data?.allocators_retrievability_score_histogram?.total_count,
+      buckets: data?.allocators_retrievability_score_histogram?.buckets,
+    };
+  }, []);
+
+  const getNumberOfDealsSP = useCallback(async () => {
     const data = await api(`${CPD_API}/stats/providers/clients`, {}, true);
     return {
       count: data?.providers_client_count_histogram?.total_count,
@@ -22,7 +31,7 @@ const useCDP = () => {
     };
   }, []);
 
-  const getSizeOfTheBiggestDeal = useCallback(async () => {
+  const getSizeOfTheBiggestDealSP = useCallback(async () => {
     const data = await api(`${CPD_API}/stats/providers/biggest_client_distribution`, {}, true);
     return {
       count: data?.providers_biggest_client_distribution_histogram	?.total_count,
@@ -48,10 +57,9 @@ const useCDP = () => {
   const parseSingleBucket = useCallback((bucket, index, length, unit = '') => {
     let name = `${bucket.value_from_exclusive} - ${bucket.value_to_inclusive}${unit}`
     if (bucket.value_to_inclusive - bucket.value_from_exclusive <= 1) {
-      name = `${bucket.value_to_inclusive}${unit}`
-    }
-    if (index === 0) {
-      const isUnisPlural = unit.endsWith('s')
+      const unitWithoutS = unit.slice(0, -1)
+      name = `${bucket.value_to_inclusive}${ bucket.value_to_inclusive === 1 ? unitWithoutS : unit}`
+    } else if (index === 0) {
       const unitWithoutS = unit.slice(0, -1)
 
       name = `${bucket.value_from_exclusive < 0 ? '' : 'Less than '}${bucket.value_to_inclusive}${ bucket.value_to_inclusive === 1 ? unitWithoutS : unit}`
@@ -78,12 +86,13 @@ const useCDP = () => {
   }, [])
 
   return {
-    getRetrievability,
-    getNumberOfDeals,
+    getRetrievabilitySP,
+    getNumberOfDealsSP,
     groupData,
     parseSingleBucket,
     parseBucketGroup,
-    getSizeOfTheBiggestDeal,
+    getSizeOfTheBiggestDealSP,
+    getRetrievabilityAllocator,
   };
 }
 

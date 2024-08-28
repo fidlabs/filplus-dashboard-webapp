@@ -12,7 +12,7 @@ const tabs = ['3 bars', '6 bars', 'All']
 
 const BiggestDealsSP = ({setCurrentElement}) => {
   const {
-    getSizeOfTheBiggestDeal,
+    getSizeOfTheBiggestDealSP,
   } = useCDP()
 
   const { top, ref } = useScrollObserver();
@@ -22,7 +22,7 @@ const BiggestDealsSP = ({setCurrentElement}) => {
   const { scale, selectedScale, setSelectedScale } = useChartScale(chartData)
 
   useEffect(() => {
-    getSizeOfTheBiggestDeal().then(setNumberOfBiggestDeals)
+    getSizeOfTheBiggestDealSP().then(setNumberOfBiggestDeals)
   }, []);
 
   useEffect(() => {

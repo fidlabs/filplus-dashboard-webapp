@@ -6,6 +6,7 @@ import { useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import BiggestDealsSP from './BiggestDealsSP';
 import { debounce } from 'lodash';
+import RetrievabilityScoreAllocator from './RetrievabilityScoreAllocator';
 
 const ComplianceDashboard = () => {
 
@@ -57,23 +58,28 @@ const ComplianceDashboard = () => {
                   <button onClick={e => scrollTo('BiggestDealsSP')}>Biggest Deal</button>
                 </div>
               </div>
-              {/*<div>*/}
-              {/*  <div>Allocators</div>*/}
-              {/*  <div className={s.submenu}>*/}
-              {/*    <button onClick={e => scrollTo('RetrievabilityScoreSP')}>Retrievability Score</button>*/}
-              {/*    <button onClick={e => scrollTo('NumberOfDealsSP')}>Number Of Deals</button>*/}
-              {/*    <button onClick={e => scrollTo('BiggestDealsSP')}>Biggest Deal</button>*/}
-              {/*  </div>*/}
+              <div>
+                <div>Allocators</div>
+                <div className={s.submenu}>
+                  <button onClick={e => scrollTo('RetrievabilityScoreAllocator')}>Retrievability Score</button>
+                  <button onClick={e => scrollTo('NumberOfDealsSP')}>Number Of Deals</button>
+                  <button onClick={e => scrollTo('BiggestDealsSP')}>Biggest Deal</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="grid w-full">
           <h3 className="h3 text-black">SPs</h3>
-          <RetrievabilityScoreSP setCurrentElement={scrollCallback} />
-          <NumberOfDealsSP setCurrentElement={scrollCallback} />
-          <BiggestDealsSP setCurrentElement={scrollCallback} />
-          {/*<h3 className="h3 text-black">Allocators</h3>*/}
+          <>
+            <RetrievabilityScoreSP setCurrentElement={scrollCallback} />
+            <NumberOfDealsSP setCurrentElement={scrollCallback} />
+            <BiggestDealsSP setCurrentElement={scrollCallback} />
+          </>
+          <h3 className="h3 text-black">Allocators</h3>
+          <>
+            <RetrievabilityScoreAllocator setCurrentElement={scrollCallback} />
+          </>
         </div>
       </div>
     </div>
