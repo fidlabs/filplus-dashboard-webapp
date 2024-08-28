@@ -8,8 +8,10 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/d3-scale": "^4.0.8",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.2.6",
+    "d3-scale": "^4.0.2",
     "filesize": "^6.1.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.395.0",
@@ -27,6 +29,7 @@
     "recharts": "^2.12.7",
     "sonner": "^1.5.0",
     "use-debounce": "^6.0.0",
+    "usehooks-ts": "^3.1.0",
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {

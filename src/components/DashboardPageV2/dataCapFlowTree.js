@@ -182,6 +182,13 @@ export const DataCapFlowTree = () => {
     }
   }, [treeChartContainerRef]);
 
+  const straightPathFunc = (linkDatum, orientation) => {
+    const { source, target } = linkDatum;
+    return orientation === 'horizontal'
+      ? `M${source.y},${source.x}L${target.y},${target.x}`
+      : `M${source.x},${source.y}L${target.x},${target.y}`;
+  };
+
   return <div>
     {!!treeData?.length && <div>
       <div ref={(ref) => setTreeChartContainerRef(ref)} id="treeWrapper" style={{ width: '100%', height: '1000px' }}>
@@ -194,6 +201,8 @@ export const DataCapFlowTree = () => {
               zoomable={false}
               collapsible={true}
               depthFactor={400}
+              pathFunc='diagonal'
+              pathClassFunc={s.treePath}
               renderCustomNodeElement={render}
               shouldCollapseNeighborNodes={true} />
       </div>
@@ -219,18 +228,22 @@ const TreeNode = ({ nodeDatum, toggleNode, onNodeClick }) => {
         </text>
         <text className={s.treeLabelInfo} x="-20" y="35">
           {nodeDatum.attributes &&
-            Object.entries(nodeDatum.attributes).map(([labelKey, labelValue], i) => (
-              <tspan key={`${labelKey}-${i}`} x="-20" dy="1.2em">
-                {labelKey}: {labelValue}
-              </tspan>
-            ))}
+            Object.entries(nodeDatum.attributes).map(([labelKey, labelValue], i) => {
+              if (labelKey !== 'id') {
+                return (
+                  <tspan key={`${labelKey}-${i}`} x="-20" dy="1.2em">
+                    {labelKey}: {labelValue}
+                  </tspan>
+                )
+              }
+            })}
         </text>
         {!!nodeDatum?.attributes?.id && <text
           className={cn(s.treeLabelTitle, s.treeLabelTitleHoverable)}
           textAnchor="start"
           fontWeight={400}
           x="-20"
-          y="90"
+          y="70"
           onClick={() => {
             window.open(`notaries\\${nodeDatum?.attributes?.id}`, '_blank');
           }}

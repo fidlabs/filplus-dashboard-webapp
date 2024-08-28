@@ -78,6 +78,7 @@ export const DataCapUsedOverTime = () => {
 
       {reversedWeekKeys.map((key, index) => (
         <div
+          key={index}
           style={{
             color: palette(
               0,
@@ -121,9 +122,8 @@ export const DataCapUsedOverTime = () => {
 
 };
 
-class CustomizedAxisTick extends PureComponent {
-  render() {
-    const { x, y, stroke, payload } = this.props;
+const CustomizedAxisTick = (props) => {
+    const { x, y, stroke, payload } = props;
     return (
       <g transform={`translate(${x},${y})`}>
         <text x={0} y={0} dx={-5} dy={5} textAnchor="end" fill="#666" transform="rotate(-90)">
@@ -131,6 +131,5 @@ class CustomizedAxisTick extends PureComponent {
         </text>
       </g>
     );
-  }
 }
 

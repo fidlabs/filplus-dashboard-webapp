@@ -85,7 +85,6 @@ export default function ClientAllocationPage() {
       </div>
 
     </div>;
-
   };
 
   const chartData = useMemo(() => {

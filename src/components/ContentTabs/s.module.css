@@ -2,30 +2,28 @@
   min-width: 100%;
 }
 
-.tabs > .tabsHeader {
-  width: 100%;
+.tabsHeader {
+  width: min-content;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-bottom: 1px solid var(--theme-background);
+  background: var(--theme-background);
+  border-radius: 8px;
+  box-shadow: var(--theme-area-box-shadow-inset);
 }
 
-.tabs > .tabsHeader > .tabToggle {
-  padding: 8px 16px;
+.tabsHeader > .tabToggle {
+  padding: 4px 12px;
   cursor: pointer;
-  margin-bottom: -1px;
   font-weight: 500;
   font-size: 14px;
-  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  margin: 4px;
+  border-radius: 4px;
 }
 
-.tabs > .tabsHeader > .tabToggle:hover {
-  border-bottom: 2px solid var(--color-black);
-  background-color: var(--theme-background);
-}
-
-.tabs > .tabsHeader > .tabToggle.active {
-  border-bottom: 2px solid var(--color-black);
+.tabsHeader > .tabToggle.active {
+  background: white;
 }
 
 .tabs > .tabsContent {

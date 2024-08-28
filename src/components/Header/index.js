@@ -118,6 +118,15 @@ export const Header = () => {
             </NavLink>
             <NavLink
               exact
+              to="/compliance-data-portal"
+              className={s.navLink}
+              activeClassName={s.active}
+              onClick={handlerCloseMenu}
+            >
+              Compliance
+            </NavLink>
+            <NavLink
+              exact
               to="/about"
               className={s.navLink}
               activeClassName={s.active}

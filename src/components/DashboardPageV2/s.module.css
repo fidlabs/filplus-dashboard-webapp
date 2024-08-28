@@ -70,6 +70,7 @@
   line-height: inherit;
   color: var(--theme-text-secondary);
 }
+
 .chartTabButtonActive {
   font-weight: 600;
   color: var(--color-black);
@@ -180,6 +181,7 @@
 .backLink > svg {
   transform: translateX(-2px);
 }
+
 .backLink:hover > svg {
   transform: translateX(-6px);
 }
@@ -298,18 +300,23 @@
   .size1 {
     grid-column: span 1;
   }
+
   .size2 {
     grid-column: span 2;
   }
+
   .size3 {
     grid-column: span 3;
   }
+
   .size4 {
     grid-column: span 4;
   }
+
   .size5 {
     grid-column: span 5;
   }
+
   .size6 {
     grid-column: span 6;
   }
@@ -378,4 +385,8 @@
   fill: var(--color-dodger-blue);
   margin: 0;
   stroke-width: 0.3;
+}
+
+.treePath {
+  stroke: red;
 }

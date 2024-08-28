@@ -31,6 +31,9 @@ const ClientBreakdownPage = lazy(() =>
 const MinersPage = lazy(() => import('components/MinersPage'));
 const MinerPage = lazy(() => import('components/MinerPage'));
 
+
+const ComplianceDashboardPage = lazy(() => import('components/ComplianceDashboard'));
+
 function App() {
   return (
     <>
@@ -70,6 +73,11 @@ function App() {
               exact
               path="/clients/:clientID/allocations"
               component={ClientAllocationPage}
+            />
+            <Route
+              exact
+              path="/compliance-data-portal"
+              component={ComplianceDashboardPage}
             />
             <Route
               exact
