@@ -48,8 +48,16 @@ const BiggestDealsSP = ({setCurrentElement}) => {
               {data?.count}
             </div>
           </div>
+          <div className="card alt compact size3">
+            <div className="cardTitle">
+              What is this data?
+            </div>
+            <div className="cardData compact">
+              What % of the total data cap received comes from the single client
+            </div>
+          </div>
           <div className="size6">
-            <BarGraph data={chartData} scale={scale} isLoading={isLoading}/>
+            <BarGraph data={chartData} scale={scale} isLoading={isLoading} />
           </div>
         </div>
 

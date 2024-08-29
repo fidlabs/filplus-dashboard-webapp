@@ -63,6 +63,21 @@ const ProviderComplianceAllocator = ({setCurrentElement}) => {
             <div className="cardData">
               {data?.count}
             </div>
+            <div className="cardData compact">
+              This data shows allocators which clients made at least one deal
+            </div>
+          </div>
+          <div className="card alt compact size3">
+            <div className="cardTitle noMargin">
+              What are those metrics?
+            </div>
+            <div className="cardData compact">
+              <ul style={{paddingLeft: '15px', margin: 0}}>
+                <li>SP have retrievability score above average</li>
+                <li>SP have at least 3 clients</li>
+                <li>SP biggest client accounts for less than 30%</li>
+              </ul>
+            </div>
           </div>
           <div className="size6">
             <BarGraph data={chartData} scale={scale} isLoading={isLoading}/>
