@@ -45,6 +45,10 @@
   gap: 8px;
 }
 
+.submenu button {
+  height: 22px;
+}
+
 .dashboardsLayoutMenuIndicator {
   position: absolute;
   width: 4px;
