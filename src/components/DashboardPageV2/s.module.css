@@ -140,8 +140,6 @@
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding-right: 8px;
-  padding-left: 4px;
   background: transparent;
   border: 0;
   outline: 0;
@@ -178,12 +176,32 @@
   margin-right: 16px;
 }
 
+.selectedNodes {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-top: 10px;
+}
+
 .backLink > svg {
   transform: translateX(-2px);
 }
 
 .backLink:hover > svg {
   transform: translateX(-6px);
+}
+
+.backLink.inactive {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.separator {
+  width: 1px;
+  height: 14px;
+  border-left: 1px solid var(--theme-text-secondary);
+  transform: rotate(15deg);
+  transform-origin: center;
 }
 
 .label {
