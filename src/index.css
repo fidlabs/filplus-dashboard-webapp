@@ -304,3 +304,13 @@ main {
   font-weight: 500;
   color: var(--theme-text);
 }
+
+.relative {
+  position: relative;
+}
+
+.flex-wrapper {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}

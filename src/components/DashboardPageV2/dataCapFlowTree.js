@@ -1,22 +1,24 @@
-import { useFetch } from '../../hooks/fetch';
-import { convertBytesToIEC } from '../../utils/bytes';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
 import s from './s.module.css';
 import cn from 'classnames';
-
-const PB_10 = 10 * 1024 * 1024 * 1024 * 1024 * 1024;
-const PB_15 = 15 * 1024 * 1024 * 1024 * 1024 * 1024;
+import useDataCapFlow from '../../hooks/useDataCapFlow';
+import { convertBytesToIEC } from '../../utils/bytes';
 
 export const DataCapFlowTree = () => {
-  const fetchUrl = '/get-dc-flow-graph-grouped-by-audit-status';
-  const [data, { loading, loaded }] = useFetch(fetchUrl);
+  const {
+    dataCapFlow
+  } = useDataCapFlow();
+
+
   const [dimensions, setDimensions] = useState({
     width: 0, height: 0
   });
+
   const [translation, setTranslation] = useState({
     x: 0, y: 0
   });
+
   const [treeChartContainerRef, setTreeChartContainerRef] = useState(undefined);
 
   const render = (props) => (
@@ -25,151 +27,6 @@ export const DataCapFlowTree = () => {
       toggleNode={props.toggleNode}
     />
   );
-
-  const getName = (key) => {
-    switch (key) {
-      case 'rkh':
-        return 'Root Key Holder';
-      case 'inactiveAllocators':
-        return 'Inactive Allocators';
-      case 'activeAllocators':
-        return 'Active Allocators';
-      case 'passedAudit':
-        return 'Passed Audit';
-      case 'passedAuditConditionally':
-        return 'Passed Audit Conditionally';
-      case 'failedAudit':
-        return 'Failed Audit';
-      case 'notAudited':
-        return 'Not Audited';
-      default:
-        return key;
-    }
-  };
-
-  const countChildAllocators = (data) => {
-    if (data?.datacap) {
-      return undefined;
-    }
-
-    if (data?.allocators?.length) {
-      return data.allocators.length;
-    } else {
-      return Object.entries(data).reduce((acc, [key, data]) => {
-        return acc + countChildAllocators(data);
-      }, 0);
-    }
-  };
-
-  const groupAllocators = (allocators, skipUnique) => {
-
-    const uniqueAllocationValues = [...new Set(allocators.map(a => a.datacap))];
-
-    if (uniqueAllocationValues.length > 3 && !skipUnique) {
-      const datacapAllocatorsGrouped = Object.groupBy(Object.values(allocators), item => {
-        if (item.datacap < PB_10) {
-          return '<10 PiB';
-        } else if (item.datacap < PB_15) {
-          return '>10 PiB & <15 PiB';
-        } else {
-          return '>15 PiB';
-        }
-      });
-      return Object.entries(datacapAllocatorsGrouped).map(([key, data]) => {
-        return {
-          name: key,
-          attributes: {
-            datacap: convertBytesToIEC(data.reduce((acc, curr) => acc + +curr.datacap, 0)),
-            allocators: data.length
-          },
-          children: groupAllocators(data, true)
-        };
-      });
-    } else {
-      const datacapAllocatorsGrouped = Object.groupBy(Object.values(allocators), item => convertBytesToIEC(+item.datacap));
-
-      if (Object.keys(datacapAllocatorsGrouped).length === 1) {
-        return Object.values(datacapAllocatorsGrouped)[0].map((data) => {
-          return {
-            name: data.name ?? data.addressId,
-            attributes: {
-              datacap: convertBytesToIEC(+data.datacap),
-              id: data.addressId
-            },
-            children: undefined
-          };
-        });
-      }
-
-      return Object.entries(datacapAllocatorsGrouped).map(([key, data]) => {
-        if (data.length === 1) {
-          return {
-            name: data[0].name ?? data[0].addressId,
-            attributes: {
-              datacap: convertBytesToIEC(+data[0].datacap),
-              id: data[0].addressId
-            },
-            children: undefined
-          };
-        }
-        return {
-          name: key,
-          attributes: {
-            datacap: convertBytesToIEC(data.reduce((acc, curr) => acc + +curr.datacap, 0)),
-            allocators: data.length
-          },
-          children: data.map((data) => {
-            return {
-              name: data.name ?? data.addressId,
-              attributes: {
-                datacap: convertBytesToIEC(+data.datacap),
-                id: data.addressId
-              },
-              children: undefined
-            };
-          })
-        };
-      });
-    }
-  };
-
-  const parseChildren = (data) => {
-    if (data?.allocators?.length) {
-      if (data?.allocators?.length > 10) {
-        return groupAllocators(data.allocators);
-      }
-      return data.allocators.map((data) => {
-        return {
-          name: data.name ?? data.addressId,
-          attributes: {
-            datacap: convertBytesToIEC(+data.datacap),
-            id: data.addressId
-          },
-          children: undefined
-        };
-      });
-    } else {
-      return Object.entries(data).map(([key, data]) => {
-        return {
-          name: getName(key),
-          attributes: {
-            datacap: convertBytesToIEC(data.totalDc ? +data.totalDc : Object.values(data).reduce((acc, val) => acc + +val.totalDc, 0)),
-            allocators: countChildAllocators(data)
-          },
-          children: parseChildren(data)
-        };
-      });
-    }
-  };
-
-  const treeData = useMemo(() => {
-    return Object.entries(data).map(([key, data]) => {
-      return {
-        name: getName(key),
-        children: parseChildren(data)
-      };
-    });
-  }, [data]);
 
   useEffect(() => {
     if (treeChartContainerRef?.getBoundingClientRect) {
@@ -182,17 +39,10 @@ export const DataCapFlowTree = () => {
     }
   }, [treeChartContainerRef]);
 
-  const straightPathFunc = (linkDatum, orientation) => {
-    const { source, target } = linkDatum;
-    return orientation === 'horizontal'
-      ? `M${source.y},${source.x}L${target.y},${target.x}`
-      : `M${source.x},${source.y}L${target.x},${target.y}`;
-  };
-
   return <div>
-    {!!treeData?.length && <div>
+    {!!dataCapFlow?.length && <div>
       <div ref={(ref) => setTreeChartContainerRef(ref)} id="treeWrapper" style={{ width: '100%', height: '1000px' }}>
-        <Tree data={treeData}
+        <Tree data={dataCapFlow}
               initialDepth={1}
               separation={{ siblings: 0.66, nonSiblings: 1 }}
               nodeSize={{ x: 200, y: 200 }}
@@ -232,7 +82,7 @@ const TreeNode = ({ nodeDatum, toggleNode, onNodeClick }) => {
               if (labelKey !== 'id') {
                 return (
                   <tspan key={`${labelKey}-${i}`} x="-20" dy="1.2em">
-                    {labelKey}: {labelValue}
+                    {labelKey}: {labelKey === 'datacap' ? convertBytesToIEC(labelValue) :labelValue}
                   </tspan>
                 )
               }
