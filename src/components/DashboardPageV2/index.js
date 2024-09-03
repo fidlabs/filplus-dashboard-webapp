@@ -146,12 +146,7 @@ export default function DashboardPage() {
         </div>
       </div>
       <div className="grid">
-        <div className="card size6">
-          <div className="cardTitle">
-            <span>DataCap Used Over Time by Allocator</span>
-          </div>
-          <DataCapUsedOverTime />
-        </div>
+        <DataCapUsedOverTime />
       </div>
     </div>
   );

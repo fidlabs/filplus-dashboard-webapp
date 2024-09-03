@@ -28,6 +28,7 @@
 
 .tabsHeader > .tabToggle.active {
   background: white;
+  box-shadow: var(--theme-area-box-shadow);
 }
 
 .tabs > .tabsContent {

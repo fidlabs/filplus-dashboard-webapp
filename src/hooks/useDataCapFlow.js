@@ -148,7 +148,6 @@ const useDataCapFlow = () => {
   const dataCapFlow = useMemo(() => {
     return Object.entries(data).map(([key, data]) => {
       const children = parseChildren(data);
-      console.log(children)
       return {
         name: getName(key),
         children,

@@ -1,12 +1,11 @@
 import useCDP from '../../../hooks/useCDP';
 import { useEffect, useMemo, useState } from 'react';
-import s from '../s.module.css'
 import TabsSelector from '../../ContentTabs/TabsSelector';
 import BarGraph from './BarGraph';
 import useScrollObserver from '../../../hooks/useScrollObserver';
-import ScaleTabs from './ScaleTabs';
 import useChartData from '../hooks/useChartData';
-import useChartScale from '../hooks/useChartScale';
+import useChartScale from '../../../hooks/useChartScale';
+import SharedScaleTabs from './SharedScaleTabs';
 
 const metrics = [
   '0-1/3 metrics',
@@ -39,17 +38,17 @@ const ProviderComplianceAllocator = ({setCurrentElement}) => {
   const {
     data, isLoading
   } = useCDP().getProviderComplianceAllocator(metricRange[0], metricRange[1])
-  const { chartData, currentTab, setCurrentTab, tabs } = useChartData(data?.buckets, '%')
-  const { scale, selectedScale, setSelectedScale } = useChartScale(chartData)
+  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useChartData(data?.buckets, '%')
+  const { scale, selectedScale, setSelectedScale } = useChartScale(minValue)
 
   return <div className="size6 w-full" id="ProviderComplianceAllocator" ref={ref}>
     <div className="card">
       <div className="cardTitle noMargin">
-        <div className={s.chartHeader}>
+        <div className="chartHeader">
           <div>SP Compliance</div>
-          <div className={s.chartHeaderOptions}>
+          <div className="chartHeaderOptions">
             <TabsSelector tabs={metrics} currentTab={selectedMetric} setCurrentTab={setSelectedMetric} />
-            <ScaleTabs scale={selectedScale} setScale={setSelectedScale}/>
+            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale}/>
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
           </div>
         </div>

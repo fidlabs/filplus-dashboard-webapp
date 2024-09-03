@@ -60,29 +60,6 @@
   transition: top 0.3s ease-in-out;
 }
 
-.chartHeader {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  margin-bottom: 8px;
-  justify-content: space-between;
-}
-
-.chartHeaderOptions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-.chartHeaderOptionsVertical {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
 .chartWrap {
   overflow: hidden;
   width: 100%;

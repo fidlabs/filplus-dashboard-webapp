@@ -26,8 +26,6 @@ export const DataCapFlowGraph = () => {
       name,
       datacap,
       allocators,
-      hasChildren,
-      children
     } = nodeData
     return (<>
       <div key={1} className={s.chartTooltip}>
@@ -117,11 +115,11 @@ export const DataCapFlowGraph = () => {
       {
         selectedNodes.map((node, index) => {
           return <>
-          <button className={cn(s.cardLink, s.backLink, index === selectedNodes.length - 1 && s.inactive)} onClick={() => handleBackClick(index)}>
+          <button key={index} className={cn(s.cardLink, s.backLink, index === selectedNodes.length - 1 && s.inactive)} onClick={() => handleBackClick(index)}>
             {node.name}
           </button>
           {
-            index < selectedNodes.length - 1 && <div className={s.separator} />
+            index < selectedNodes.length - 1 && <div key={`${index}_sep`} className={s.separator} />
           }
           </>;
         })

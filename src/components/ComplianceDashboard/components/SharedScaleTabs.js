@@ -1,8 +1,8 @@
-import TabsSelector from '../../ContentTabs/TabsSelector';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useCommonChart } from '../providers/CommonChartProvider';
+import TabsSelector from '../../ContentTabs/TabsSelector';
 
-const ScaleTabs = ({ scale, setScale, global = false }) => {
+const SharedScaleTabs = ({ scale, setScale, global = false }) => {
 
   const {
     scaleTabs,
@@ -39,4 +39,4 @@ const ScaleTabs = ({ scale, setScale, global = false }) => {
   return <TabsSelector tabs={scaleTabs} currentTab={currentTab} setCurrentTab={switchScale} />
 }
 
-export default ScaleTabs;
+export default SharedScaleTabs

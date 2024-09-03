@@ -5,8 +5,8 @@ import TabsSelector from '../../ContentTabs/TabsSelector';
 import BarGraph from './BarGraph';
 import useScrollObserver from '../../../hooks/useScrollObserver';
 import useChartData from '../hooks/useChartData';
-import useChartScale from '../hooks/useChartScale';
-import ScaleTabs from './ScaleTabs';
+import useChartScale from '../../../hooks/useChartScale';
+import SharedScaleTabs from './SharedScaleTabs';
 
 
 const AuditStateAllocator = ({setCurrentElement}) => {
@@ -28,10 +28,10 @@ const AuditStateAllocator = ({setCurrentElement}) => {
   return <div className="size6 w-full" id="AuditStateAllocator" ref={ref}>
     <div className="card">
       <div className="cardTitle noMargin">
-        <div className={s.chartHeader}>
+        <div className="chartHeader">
           <div>Audit state</div>
-          <div className={s.chartHeaderOptions}>
-            <ScaleTabs scale={selectedScale} setScale={setSelectedScale} />
+          <div className="chartHeaderOptions">
+            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale} />
           </div>
         </div>
       </div>

@@ -284,6 +284,10 @@
   aspect-ratio: 1;
 }
 
+.chartWrap.aspect3_2 {
+  aspect-ratio: 3/2;
+}
+
 .chartWrap.wide {
   aspect-ratio: 2;
 }
@@ -407,4 +411,68 @@
 
 .treePath {
   stroke: red;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.legend .item {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  min-width: 40px;
+  display: flex;
+  gap: 5px;
+  border-radius: 9px;
+  align-items: center;
+  height: 25px;
+  padding: 5px;
+}
+
+.legend .menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.legend .menu .item {
+  justify-content: center;
+}
+
+.legend .item.siblingActive:not(.active) {
+  filter: grayscale(80%);
+  opacity: 0.6;
+}
+
+.legend .item:hover {
+  background-color: var(--color-solitude);
+  filter: grayscale(0%) !important;
+  opacity: 1 !important;
+}
+
+.legend .item.active {
+  background-color: var(--color-oyster-bay) !important;
+  filter: grayscale(0%) !important;
+  opacity: 1 !important;
+}
+
+.legend .item.active + .item.active {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.legend .item.active:has(+ .item.active) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.legend .indicator {
+  width: 20px;
+  height: 100%;
+  border-radius: 4px;
 }

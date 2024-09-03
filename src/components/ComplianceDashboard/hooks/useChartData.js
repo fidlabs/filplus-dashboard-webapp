@@ -24,6 +24,10 @@ const useChartData = (data, unit = '') => {
     }
   }, [data, currentTab]);
 
+  const minValue = useMemo(() => {
+    return Math.min(...chartData.map(item => item.value))
+  }, [chartData])
+
   useEffect(() => {
     setCurrentTab(globalBarTab)
   }, [globalBarTab]);
@@ -32,7 +36,8 @@ const useChartData = (data, unit = '') => {
     chartData,
     currentTab,
     setCurrentTab,
-    tabs: barTabs
+    tabs: barTabs,
+    minValue
   }
 }
 

@@ -216,7 +216,7 @@ export const MarketDealsStateBySize = ({ marketDealsState }) => {
 
   return (
     <div className={s.chartWrap}>
-      <div className={s.chartHeader}>
+      <div className="chartHeader">
         <div className={s.chartTabButtonWrapper}>
           <button
             className={cn(s.chartTabButton, {
