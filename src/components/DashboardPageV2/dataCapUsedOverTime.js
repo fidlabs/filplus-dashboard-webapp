@@ -125,10 +125,6 @@ export const DataCapUsedOverTime = () => {
     setSelectedWeek([]);
   };
 
-  const selectAllLegend = () => {
-    setSelectedWeek(weeksKeys);
-  };
-
   const renderLegend = () => {
     return (
       <div className={s.legend}>
@@ -169,6 +165,11 @@ export const DataCapUsedOverTime = () => {
     return Math.min(...values);
   }, [parsedData, weeksToDisplay]);
 
+  const filteredData = useMemo(() => {
+    console.log(parsedData)
+    return parsedData.filter((item) => weeksToDisplay.some((key) => Object.keys(item).includes(key)));
+  }, [parsedData, weeksToDisplay]);
+
   const { scale, selectedScale, setSelectedScale } = useChartScale(minValue, 'log');
 
   return <div className="card size6">
@@ -181,9 +182,9 @@ export const DataCapUsedOverTime = () => {
       </div>
     </div>
     <div className={cn(s.chartWrap, s.aspect3_2, s.chartMarginBottom)}>
-      {!!parsedData.length && <ResponsiveContainer width="100%" aspect={3 / 2} debounce={500}>
+      {!!filteredData.length && <ResponsiveContainer width="100%" aspect={3 / 2} debounce={500}>
         <BarChart
-          data={parsedData}
+          data={filteredData}
           margin={{ top: 40, right: 50, left: 20, bottom: 200 }}
         >
           <CartesianGrid strokeDasharray="3 3" />

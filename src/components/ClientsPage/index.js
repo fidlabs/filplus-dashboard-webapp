@@ -6,6 +6,7 @@ import { PageHeading } from 'components/PageHeading';
 import { Table } from 'components/Table';
 import CronStats from 'components/CronStats';
 import { LoadingValue } from '../LoadingValue';
+import { convertBytesToIEC } from '../../utils/bytes';
 
 const table = [
   {
@@ -95,6 +96,39 @@ export default function ClientsPage() {
           <div className="cardData">
             <LoadingValue
               value={results?.count}
+              loading={loading}
+            />
+          </div>
+        </div>
+        <div className="card size3">
+          <div className="cardTitle">
+            <span>Total remaining DataCap</span>
+          </div>
+          <div className="cardData">
+            <LoadingValue
+              value={convertBytesToIEC(results?.totalRemainingDatacap)}
+              loading={loading}
+            />
+          </div>
+        </div>
+        <div className="card size3">
+          <div className="cardTitle">
+            <span>Clients With Active Deals</span>
+          </div>
+          <div className="cardData">
+            <LoadingValue
+              value={results?.clientsWithActiveDeals}
+              loading={loading}
+            />
+          </div>
+        </div>
+        <div className="card size3">
+          <div className="cardTitle">
+            <span>Clients with active deals and Remaining DataCap</span>
+          </div>
+          <div className="cardData">
+            <LoadingValue
+              value={results?.countOfClientsWhoHaveDcAndDeals	}
               loading={loading}
             />
           </div>
