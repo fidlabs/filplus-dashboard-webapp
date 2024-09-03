@@ -1,8 +1,7 @@
-import ScaleTabs from './ScaleTabs';
 import TabsSelector from '../../ContentTabs/TabsSelector';
 import { useCommonChart } from '../providers/CommonChartProvider';
-import s from '../s.module.css'
 import cn from 'classnames';
+import SharedScaleTabs from './SharedScaleTabs';
 
 const CommonChartsSettings = () => {
 
@@ -16,9 +15,9 @@ const CommonChartsSettings = () => {
 
   return (
     <div className="card">
-      <div className={cn("cardTitle noMargin", s.chartHeaderOptionsVertical)}>
+      <div className={cn("cardTitle noMargin chartHeaderOptionsVertical")}>
         Common chart settings
-          <ScaleTabs scale={globalScaleTab} setScale={setGlobalScaleTab} global />
+          <SharedScaleTabs scale={globalScaleTab} setScale={setGlobalScaleTab} global />
           <TabsSelector tabs={barTabs} currentTab={globalBarTab} setCurrentTab={setGlobalBarTab} />
       </div>
     </div>

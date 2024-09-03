@@ -1,17 +1,17 @@
 import { scaleSymlog } from 'd3-scale';
 import { useMemo, useState } from 'react';
 
-const useChartScale = (chartData) => {
+const useChartScale = (minValue, defaultValue = 'linear') => {
 
-  const [selectedScale, setSelectedScale] = useState('linear')
+  const [selectedScale, setSelectedScale] = useState(defaultValue)
 
   const scale = useMemo(() => {
     if (selectedScale === 'linear') {
       return 'linear'
     } else if (selectedScale === 'log') {
-      return scaleSymlog().constant(Math.min(...chartData.map(item => item.value)));
+      return scaleSymlog().constant(minValue);
     }
-  }, [selectedScale, chartData])
+  }, [selectedScale, minValue])
 
   return {
     scale,

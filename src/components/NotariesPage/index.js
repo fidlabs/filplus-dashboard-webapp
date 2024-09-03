@@ -174,9 +174,6 @@ export default function NotariesPage() {
   useEffect(() => {
     setQuery((params) => ({ ...params, showInactive }));
   }, [showInactive]);
-
-  console.log(results)
-
   return (
     <div className="container">
       <div className="tableSectionWrap">

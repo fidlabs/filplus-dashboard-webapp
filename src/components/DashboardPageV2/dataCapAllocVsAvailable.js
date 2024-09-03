@@ -78,7 +78,6 @@ export const DataCapAllocVsAvailable = ({
           dataKey="value"
           activeIndex={[0, 1]}
           activeShape={renderActiveShape}
-          paddingAngle={3}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={palette(2, index)} />
