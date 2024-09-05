@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import { useQueryParams } from 'hooks/queryParams';
+import { useQueryParams } from 'hooks';
 import { api } from 'utils/api';
 import { limitDefaultValue, limitStorageName } from 'constant';
 

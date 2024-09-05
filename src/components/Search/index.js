@@ -1,8 +1,7 @@
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useQueryParams } from 'hooks/queryParams';
-import { Svg } from 'components/Svg';
-
+import { useQueryParams } from 'hooks';
+import { Svg } from 'components';
 import s from './s.module.css';
 import cn from 'classnames';
 

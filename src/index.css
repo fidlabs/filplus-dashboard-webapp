@@ -337,3 +337,41 @@ main {
   gap: 5px;
   align-items: center;
 }
+
+.chartWrap {
+  overflow: hidden;
+  width: 100%;
+}
+
+.chartWrap.square {
+  aspect-ratio: 1;
+}
+
+.chartWrap.aspect3_2 {
+  aspect-ratio: 3/2;
+}
+
+.chartWrap.wide {
+  aspect-ratio: 2;
+}
+
+.chartTooltip {
+  background: var(--theme-area-background);
+  box-shadow: var(--theme-area-box-shadow);
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.chartTooltipTitle {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--theme-text-secondary);
+}
+
+.chartTooltipData {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--theme-text);
+}

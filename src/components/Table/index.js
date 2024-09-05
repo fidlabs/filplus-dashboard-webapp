@@ -1,23 +1,15 @@
 import cn from 'classnames';
 import { Link, useRouteMatch } from 'react-router-dom';
-
-import { SortButton } from 'components/SortButton';
-import { Spinner } from 'components/Spinner';
-import { ExternalLink } from 'components/ExternalLink';
-import { CopyButton } from 'components/CopyButton';
-import { SortDropdown } from 'components/SortDropdown';
-import { Tooltip } from 'components/Tooltip';
+import { ExternalLink, CopyButton, Tooltip, SortButton, Spinner, SortDropdown } from 'components';
 import { convertBytesToIEC } from 'utils/bytes';
 import { shortcutString } from 'utils/strings';
 import { formatDuration } from 'utils/formatDuration';
 import { getFormattedFIL } from 'utils/numbers';
 import { generatePath } from 'react-router';
-
 import s from './s.module.css';
 import { buildCompositeChildren, buildCustomLinkChildren } from './utils';
-import useQuery from '../../hooks/useQuery';
-import useSkipFirstRun from '../../hooks/useSkipFirstRun';
-import { calculateDateFromHeight } from '../../utils/height';
+import { useQuery, useSkipFirstRun } from 'hooks';
+import { calculateDateFromHeight } from 'utils/height';
 
 const Th = ({ item }) => {
   const { title, align, sort, key } = item;

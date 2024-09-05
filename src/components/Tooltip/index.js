@@ -2,9 +2,7 @@ import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import cn from 'classnames';
 import { usePopper } from 'react-popper';
-
-import { Svg } from 'components/Svg';
-
+import { Svg } from 'components';
 import s from './s.module.css';
 
 const tooltipRoot = document.querySelector('#root-tooltip');

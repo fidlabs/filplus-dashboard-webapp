@@ -2,12 +2,10 @@ import { useState } from 'react';
 import cn from 'classnames';
 
 import { api, apiRaw } from 'utils/api';
-import { Svg } from 'components/Svg';
-import { Spinner } from 'components/Spinner';
+import { Svg, Spinner, Search } from 'components';
 import { Tabs } from './Tabs';
 import s from './s.module.css';
 import { buildCompositeChildren } from '../Table/utils';
-import { Search } from '../Search';
 import classNames from 'classnames';
 
 export const TableHeading = ({ title, tabs, csv, portalRef, searchPlaceholder, hideSearch, hideExport }) => {

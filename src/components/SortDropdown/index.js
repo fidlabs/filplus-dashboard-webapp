@@ -3,7 +3,7 @@ import { usePopper } from 'react-popper';
 import outy from 'outy';
 import cn from 'classnames';
 
-import { useQueryParams } from 'hooks/queryParams';
+import { useQueryParams } from 'hooks';
 import { Svg } from 'components/Svg';
 
 import s from './s.module.css';

@@ -98,14 +98,6 @@
   color: var(--color-medium-turquoise);
 }
 
-
-.chartTooltip {
-  background: var(--theme-area-background);
-  box-shadow: var(--theme-area-box-shadow);
-  padding: 24px;
-  border-radius: 8px;
-}
-
 .flexContainer {
   display: flex;
   justify-content: space-between;

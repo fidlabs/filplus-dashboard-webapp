@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import TabsSelector from '../ContentTabs/TabsSelector';
+import { TabsSelector } from 'components';
 
 const scaleTabs = ['Linear scale', 'Log scale'];
 

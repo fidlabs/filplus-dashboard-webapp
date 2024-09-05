@@ -3,9 +3,9 @@ import cn from 'classnames';
 
 import { shortcutAddress } from 'utils/strings';
 import { copyToClipboard } from 'utils/copyToClipboard';
-import { Svg } from 'components/Svg';
 
 import s from './s.module.css';
+import { CopyIcon } from 'lucide-react';
 
 export const CopyButton = ({ address }) => {
   const [copied, setCopied] = useState(null);
@@ -40,7 +40,7 @@ export const CopyButton = ({ address }) => {
         title={`Copy to clipboard:\n${address}`}
         className={s.button}
       >
-        <Svg
+        <CopyIcon
           id="copy"
           className={cn(s.icon, {
             [s.copied]: copied === true,
