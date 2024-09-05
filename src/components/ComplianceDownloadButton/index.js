@@ -1,7 +1,7 @@
 import cn from 'classnames';
-import tableHeadingStyles from '../TableHeading/s.module.css';
-import { Spinner } from '../Spinner';
-import { api } from '../../utils/api';
+import tableHeadingStyles from 'components/TableHeading/s.module.css';
+import { Spinner } from 'components/Spinner';
+import { api } from 'utils/api';
 import { useState } from 'react';
 import { toast } from 'sonner';
 

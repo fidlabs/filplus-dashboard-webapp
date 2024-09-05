@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { Svg } from 'components/Svg';
+import { Svg } from 'components';
 import s from './s.module.css';
 
 export const Spinner = ({ className, ...rest }) => (

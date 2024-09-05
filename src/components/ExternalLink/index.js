@@ -1,5 +1,5 @@
-import { Svg } from 'components/Svg';
 import s from './s.module.css';
+import { Svg } from '../Svg';
 
 export const ExternalLink = ({
   children,

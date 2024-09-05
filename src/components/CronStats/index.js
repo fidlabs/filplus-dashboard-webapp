@@ -1,6 +1,5 @@
 import cn from 'classnames';
-
-import { useFetch } from 'hooks/fetch';
+import { useFetch } from 'hooks';
 
 import s from './s.module.css';
 import { Tooltip } from 'components/Tooltip';

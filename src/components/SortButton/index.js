@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import cn from 'classnames';
 
-import { useQueryParams } from 'hooks/queryParams';
-import { Svg } from 'components/Svg';
+import { useQueryParams } from 'hooks';
+import { Svg } from 'components';
 import s from './s.module.css';
 
 // 1 === asc

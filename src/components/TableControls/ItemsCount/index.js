@@ -2,10 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { usePopper } from 'react-popper';
 import outy from 'outy';
 import cn from 'classnames';
-
-import { useQueryParams } from 'hooks/queryParams';
-
-import { Svg } from 'components/Svg';
+import { useQueryParams } from 'hooks';
+import { Svg } from 'components';
 import {
   limitDefaultOptions,
   limitDefaultValue,

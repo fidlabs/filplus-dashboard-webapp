@@ -1,5 +1,6 @@
 .tabs {
   min-width: 100%;
+  padding-top: 4px;
 }
 
 .tabsHeader {
@@ -11,6 +12,7 @@
   background: var(--theme-background);
   border-radius: 8px;
   padding: 4px;
+  margin: 4px 0 4px 4px;
   gap: 4px;
   box-shadow: var(--theme-area-box-shadow-inset);
 }

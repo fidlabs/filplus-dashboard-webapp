@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom';
 import cn from 'classnames';
 import { usePopper } from 'react-popper';
 
-import { Svg } from 'components/Svg';
-
 import s from './s.module.css';
-import { cronDetailsDictionary } from 'components/CronStats';
+import { cronDetailsDictionary } from 'components';
 
 const tooltipRoot = document.querySelector('#root-tooltip');
 

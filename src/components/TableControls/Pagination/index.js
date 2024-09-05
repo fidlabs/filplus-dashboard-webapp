@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
-
-import { useQueryParams } from 'hooks/queryParams';
-
-import { Svg } from 'components/Svg';
+import { useQueryParams } from 'hooks';
+import { Svg } from 'components';
 import { limitDefaultValue, limitStorageName } from 'constant';
 
 import s from './s.module.css';
