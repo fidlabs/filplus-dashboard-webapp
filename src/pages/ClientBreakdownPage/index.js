@@ -22,7 +22,8 @@ import { value } from 'lodash/seq';
 import { palette } from 'utils/colors';
 import { TableHeading, PageHeading, ComplianceDownloadButton, Table, ContentTabs } from 'components';
 import { convertBytesToIEC } from 'utils/bytes';
-import { calculateDateFromHeight } from '../../utils/height';
+import { calculateISODateFromHeight } from '../../utils/height';
+const fromHeight = 3847920;
 
 const table = [
   { key: 'provider', title: 'Storage Provider ID' },
@@ -91,7 +92,7 @@ export default function ClientBreakdownPage() {
   const { clientID } = useParams();
 
   const auxEndDate = new Date().toISOString().split('T')[0];
-  const auxStartDate = new Date(1713744000000).toISOString().split('T')[0];
+  const auxStartDate = calculateISODateFromHeight(fromHeight).split('T')[0];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [tableOpened, setTableOpened] = useState(true);
