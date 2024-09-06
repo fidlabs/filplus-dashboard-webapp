@@ -89,7 +89,6 @@ export const DataCapUsedOverTime = () => {
         </div>
       ))}
     </div>;
-
   };
 
   const handleClick = (data) => {

@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 11px;
   background: var(--theme-area-background);
   border-radius: 8px 8px 0 0;
   min-height: 64px;
@@ -34,6 +34,11 @@
   background: var(--color-oyster-bay);
   overflow: hidden;
   box-shadow: 0 2px 4px var(--color-solitude);
+  width: min-content;
+}
+
+.buttonBorder span {
+  white-space: nowrap;
 }
 
 .buttonBorder.noShadow {

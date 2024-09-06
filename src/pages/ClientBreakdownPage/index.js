@@ -5,11 +5,24 @@ import { useFetch } from 'hooks';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMemo, useState } from 'react';
-import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Sector,
+  Tooltip,
+  XAxis,
+  YAxis
+} from 'recharts';
 import { value } from 'lodash/seq';
 import { palette } from 'utils/colors';
-import { TableHeading, PageHeading, ComplianceDownloadButton, Table } from 'components';
+import { TableHeading, PageHeading, ComplianceDownloadButton, Table, ContentTabs } from 'components';
 import { convertBytesToIEC } from 'utils/bytes';
+import { calculateDateFromHeight } from '../../utils/height';
 
 const table = [
   { key: 'provider', title: 'Storage Provider ID' },
@@ -29,7 +42,7 @@ const table = [
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
-  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value, name } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -41,7 +54,7 @@ const renderActiveShape = (props) => {
   const textAnchor = cos >= 0 ? 'start' : 'end';
 
   return (
-    <g>
+    <g cursor="pointer">
       <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
         {payload.name}
       </text>
@@ -65,6 +78,7 @@ const renderActiveShape = (props) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={-18} textAnchor={textAnchor} fill={fill}>{`${name}`}</text>
       <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value}%`}</text>
       <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
         {payload.totalSize}
@@ -77,7 +91,7 @@ export default function ClientBreakdownPage() {
   const { clientID } = useParams();
 
   const auxEndDate = new Date().toISOString().split('T')[0];
-  const auxStartDate = new Date(171374400*1000).toISOString().split('T')[0];
+  const auxStartDate = new Date(1713744000000).toISOString().split('T')[0];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [tableOpened, setTableOpened] = useState(true);
@@ -105,6 +119,19 @@ export default function ClientBreakdownPage() {
     }));
 
   }, [data]);
+
+  const renderTooltip = (props) => {
+    const allocationData = props?.payload?.[0]?.payload;
+    if (!allocationData) return null;
+
+    return <div className={'chartTooltip'}>
+      <div className={'chartTooltipTitle'}>{allocationData['name']}</div>
+      <div>
+        <p>{allocationData['totalSize']}</p>
+      </div>
+
+    </div>;
+  };
 
   return (
     <div className="container">
@@ -150,33 +177,59 @@ export default function ClientBreakdownPage() {
                 Unable to prepare data
               </div>
             }
-            <div className={cn('chartWrap', 'square', s.chart)}>
-              {chartData && <ResponsiveContainer width={'100%'} aspect={1} debounce={500}>
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={'50%'}
-                    innerRadius={'35%'}
-                    fill="#8884d8"
-                    dataKey="value"
+            <div className={cn('chartWrap', 'aspect3_2', s.chart)}>
+              {chartData && <ContentTabs tabs={['Pie chart view', 'Bar chart view']}>
+                <ResponsiveContainer width={'100%'} aspect={3 / 2} debounce={500}>
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={'50%'}
+                      innerRadius={'35%'}
+                      fill="#8884d8"
+                      dataKey="value"
+                      activeIndex={activeIndex}
+                      activeShape={renderActiveShape}
+                      onMouseEnter={onPieEnter}
+                      cursor={'pointer'}
+                      paddingAngle={1}
+                      onClick={(val) => {
+                        window.open(`/storage-providers/${val.name}`, '_blank');
+                      }}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} cursor="pointer" />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <ResponsiveContainer width={'100%'} aspect={3 / 2} debounce={500}>
+                  <BarChart
                     activeIndex={activeIndex}
-                    activeShape={renderActiveShape}
-                    onMouseEnter={onPieEnter}
-                    cursor={'pointer'}
-                    paddingAngle={1}
-                    onClick={(val) => {
-                      window.open(`/storage-providers/${val.name}`, '_blank');
-                    }}
+                    data={chartData}
+                    margin={{ top: 40, right: 20, left: 20, bottom: 50 }}
+
                   >
-                    {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} cursor="pointer" />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>}
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis tickFormatter={value => `${value} %`} />
+                    <Tooltip content={renderTooltip} />
+                    <Bar dataKey="value"
+                         onClick={(val) => {
+                           window.open(`/storage-providers/${val.name}`, '_blank');
+                         }}
+                         onMouseLeave={() => setActiveIndex(null)}
+                         onMouseEnter={(_, index) => setActiveIndex(index)}
+                         cursor="pointer">
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} cursor="pointer" />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </ContentTabs>}
             </div>
             <div className={cn(s.table, tableOpened && s.opened)}>
               <button className={cn(s.toggle)} onClick={() => setTableOpened(!tableOpened)}>
@@ -184,7 +237,11 @@ export default function ClientBreakdownPage() {
                   {tableOpened ? 'Hide' : 'Show'} table
                 </span>
               </button>
-              <Table hovered={activeIndex} hoverColor={palette(chartData.length, activeIndex)} setHovered={setActiveIndex} table={table} data={data?.stats} loading={loading} noControls noWrap />
+              <Table hovered={activeIndex} hoverColor={palette(chartData.length, activeIndex)}
+                     onRowClick={(val) => {
+                       window.open(`/storage-providers/${val.name}`, '_blank');
+                     }}
+                     setHovered={setActiveIndex} table={table} data={data?.stats} loading={loading} noControls noWrap />
             </div>
           </div>
         </div>

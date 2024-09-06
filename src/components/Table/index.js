@@ -238,7 +238,7 @@ const Td = ({ cell, item }) => {
   );
 };
 
-export const Table = ({ table, data = [], loading, hovered, hoverColor, setHovered, noControls = false, noWrap = false }) => {
+export const Table = ({ table, data = [], loading, hovered, hoverColor, setHovered, onRowClick, noControls = false, noWrap = false }) => {
   const { query, pushQueryRoute } = useQuery();
   const filterQuery = query.get('filter');
 
@@ -265,8 +265,10 @@ export const Table = ({ table, data = [], loading, hovered, hoverColor, setHover
           {data?.length ? (
             data.map((item, itemIdx) => (
               <tr key={itemIdx}
+                  onClick={() => onRowClick && onRowClick(item)}
                   className={cn({ [s.hovered]: hovered === itemIdx })}
-                  style={{ '--hover-color': `${hoverColor}33` }}
+                  style={{ '--hover-color': `${hoverColor}33`, cursor: onRowClick ? 'pointer' : 'default' }}
+                  onMouseLeave={() => setHovered && setHovered(null)}
                   onMouseEnter={() => {
                 setHovered && setHovered(itemIdx);
               }}>
