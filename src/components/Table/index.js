@@ -68,7 +68,7 @@ const Td = ({ cell, item }) => {
         );
       }
       return tempChildren;
-    }
+    };
 
     children = (
       <Link
@@ -238,7 +238,7 @@ const Td = ({ cell, item }) => {
   );
 };
 
-export const Table = ({ table, data = [], loading, noControls = false }) => {
+export const Table = ({ table, data = [], loading, hovered, hoverColor, setHovered, noControls = false, noWrap = false }) => {
   const { query, pushQueryRoute } = useQuery();
   const filterQuery = query.get('filter');
 
@@ -252,8 +252,8 @@ export const Table = ({ table, data = [], loading, noControls = false }) => {
       <div className={s.sortWrap}>
         <SortDropdown table={table} />
       </div>
-      <div className={cn(s.tableWrap, { [s.loading]: loading })}>
-        <table className={cn(s.table, { [s.noControls]: noControls })}>
+      <div className={cn(s.tableWrap, { [s.loading]: loading }, { [s.noWrap]: noWrap })}>
+        <table className={cn(s.table, { [s.noControls]: noControls }, { [s.noWrap]: noWrap })}>
           <thead>
           <tr>
             {table.map((item) => (
@@ -264,7 +264,12 @@ export const Table = ({ table, data = [], loading, noControls = false }) => {
           <tbody>
           {data?.length ? (
             data.map((item, itemIdx) => (
-              <tr key={itemIdx}>
+              <tr key={itemIdx}
+                  className={cn({ [s.hovered]: hovered === itemIdx })}
+                  style={{ '--hover-color': `${hoverColor}33` }}
+                  onMouseEnter={() => {
+                setHovered && setHovered(itemIdx);
+              }}>
                 {table.map((cell, cellIdx) => (
                   <Td key={cellIdx} cell={cell} item={item} />
                 ))}

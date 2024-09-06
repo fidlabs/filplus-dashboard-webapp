@@ -1,3 +1,7 @@
+:root {
+  --hover-color: rgba(var(--rgb-oyster-bay), 0.24);
+}
+
 .sortWrap {
   border-top: 1px solid var(--color-oyster-bay);
   background: var(--theme-area-background);
@@ -10,6 +14,10 @@
 
 .tableWrap.loading {
   min-height: 100px;
+}
+
+.tableWrap.noWrap {
+  overflow: hidden;
 }
 
 .spinnerWrap {
@@ -146,29 +154,37 @@
   .sortWrap {
     display: none;
   }
+
   .tableWrap {
     overflow-y: auto;
   }
+
   .spinnerWrap {
     align-items: center;
     padding: 0;
   }
+
   .table {
     display: table;
   }
+
   .table thead {
     display: table-header-group;
   }
+
   .table tbody {
     display: table-row-group;
   }
+
   .table tr {
     display: table-row;
     border: 0;
   }
+
   .table th {
     padding: 12px 16px;
   }
+
   .table td {
     display: table-cell;
     border-top: 1px solid var(--color-oyster-bay);
@@ -176,10 +192,19 @@
     padding: 16px;
     text-align: left;
   }
+
   .table td::before {
     display: none;
   }
-  .table tbody tr:hover td {
-    background: rgba(var(--rgb-oyster-bay), 0.24);
+
+  .table tbody tr:hover td,
+  .table tbody tr.hovered td {
+    background: var(--hover-color);
   }
+}
+
+.table.noWrap td,
+.table.noWrap th,
+.table.noWrap tr {
+  white-space: nowrap;
 }

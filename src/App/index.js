@@ -2,8 +2,6 @@ import { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { Spinner, Header } from 'components';
-import ClientAllocationPage from 'pages/ClientAllocationPage';
-import ClientDDODealsPage from 'pages/ClientDDODealsPage';
 import { Toaster } from 'sonner';
 
 const DashboardPageV2 = lazy(() => import('pages/DashboardPageV2'));
@@ -23,6 +21,12 @@ const ClientsPage = lazy(() => import('pages/ClientsPage'));
 const ClientPage = lazy(() => import('pages/ClientPage'));
 const ClientBreakdownPage = lazy(() =>
   import('pages/ClientBreakdownPage')
+);
+const ClientAllocationPage = lazy(() =>
+  import('pages/ClientAllocationPage')
+);
+const ClientDDODealsPage = lazy(() =>
+  import('pages/ClientDDODealsPage')
 );
 
 const MinersPage = lazy(() => import('pages/MinersPage'));

@@ -5,6 +5,8 @@ import { useMemo } from 'react';
 import { Area, Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import s from '../DashboardPageV2/s.module.css';
 import { PageHeading, ContentTabs, TableHeading, Table, ComplianceDownloadButton} from 'components';
+import { calculateDateFromHeight } from '../../utils/height';
+import { convertBytesToIEC } from '../../utils/bytes';
 
 const table = [
   {
@@ -149,7 +151,7 @@ export default function ClientAllocationPage() {
               loading={loading}
               noControls
             />
-            <div className={cn('chartWrap', s.aspect3_2)}>
+            <div className={cn('chartWrap', 'aspect3_2')}>
               {chartData && <ResponsiveContainer width="100%" height="100%" aspect={3/2} debounce={500}>
                 <ComposedChart
                   width={500}

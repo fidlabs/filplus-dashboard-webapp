@@ -81,7 +81,6 @@ export const Header = () => {
               Dashboard
             </NavLink>
             <NavLink
-              exact
               to="/notaries"
               className={s.navLink}
               activeClassName={s.active}
@@ -89,17 +88,7 @@ export const Header = () => {
             >
               Allocators
             </NavLink>
-            {/* <NavLink
-              exact
-              to="/large-datasets"
-              className={s.navLink}
-              activeClassName={s.active}
-              onClick={handlerCloseMenu}
-            >
-              Large datasets
-            </NavLink> */}
             <NavLink
-              exact
               to="/clients"
               className={s.navLink}
               activeClassName={s.active}
@@ -108,7 +97,6 @@ export const Header = () => {
               Clients
             </NavLink>
             <NavLink
-              exact
               to="/storage-providers"
               className={s.navLink}
               activeClassName={s.active}

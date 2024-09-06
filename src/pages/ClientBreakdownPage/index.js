@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
 import { value } from 'lodash/seq';
 import { palette } from 'utils/colors';
-import { TableHeading, PageHeading, ComplianceDownloadButton } from 'components';
+import { TableHeading, PageHeading, ComplianceDownloadButton, Table } from 'components';
 import { convertBytesToIEC } from 'utils/bytes';
 
 const table = [
@@ -76,17 +76,16 @@ const renderActiveShape = (props) => {
 export default function ClientBreakdownPage() {
   const { clientID } = useParams();
 
-  const auxEndDate = new Date();
-  const auxStartDate = new Date(new Date().setDate(auxEndDate.getDate() - 30));
+  const auxEndDate = new Date().toISOString().split('T')[0];
+  const auxStartDate = new Date(171374400*1000).toISOString().split('T')[0];
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [startDate, setStartDate] = useState(auxStartDate);
-  const [endDate, setEndDate] = useState(auxEndDate);
-  const fetchUrl = `/getDealAllocationStats/${clientID}?startDate=${
-    startDate.toISOString().split('T')[0]
-  }&endDate=${endDate.toISOString().split('T')[0]}`;
+  const [tableOpened, setTableOpened] = useState(true);
+
+  const fetchUrl = `/getDealAllocationStats/${clientID}?startDate=${auxStartDate}&endDate=${auxEndDate}`;
   const [data, { loading, error }] = useFetch(fetchUrl);
   const csvFilename = `client-${clientID}-stats.csv`;
+
 
   const name = data?.name ? `, ${data.name}` : '';
 
@@ -135,38 +134,6 @@ export default function ClientBreakdownPage() {
               url: `/clients/${clientID}/allocations`
             }
           ]}
-
-          hideSearch={<div className={s.date_filters}>
-            <div className={s.entry}>
-              <label>From</label>
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => {
-                  if (!date) return;
-                  if (Math.floor(date.getTime() / 1000) < 1598306400) {
-                    return;
-                  }
-                  setStartDate(date);
-                }}
-                disabled={loading}
-              />
-            </div>
-            <div className={s.entry}>
-              <label>to</label>
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => {
-                  if (!date) return;
-                  if (date > new Date()) {
-                    return;
-                  }
-                  setEndDate(date);
-                }}
-                disabled={loading}
-              />
-            </div>
-          </div>}
-
           csv={{
             table,
             fetchUrl,
@@ -177,38 +144,48 @@ export default function ClientBreakdownPage() {
         <div style={{
           backgroundColor: '#fff'
         }}>
-          {
-            error && <div style={{ padding: '2em' }}>
-              Unable to prepare data
+          <div className={s.chartFlexContent}>
+            {
+              error && <div style={{ padding: '2em' }}>
+                Unable to prepare data
+              </div>
+            }
+            <div className={cn('chartWrap', 'square', s.chart)}>
+              {chartData && <ResponsiveContainer width={'100%'} aspect={1} debounce={500}>
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={'50%'}
+                    innerRadius={'35%'}
+                    fill="#8884d8"
+                    dataKey="value"
+                    activeIndex={activeIndex}
+                    activeShape={renderActiveShape}
+                    onMouseEnter={onPieEnter}
+                    cursor={'pointer'}
+                    paddingAngle={1}
+                    onClick={(val) => {
+                      window.open(`/storage-providers/${val.name}`, '_blank');
+                    }}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} cursor="pointer" />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>}
             </div>
-          }
-          <div className={cn('chartWrap', s.aspect3_2)}>
-            {chartData && <ResponsiveContainer width={'100%'} aspect={1.5} debounce={500}>
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={'50%'}
-                  innerRadius={'35%'}
-                  fill="#8884d8"
-                  dataKey="value"
-                  activeIndex={activeIndex}
-                  activeShape={renderActiveShape}
-                  onMouseEnter={onPieEnter}
-                  cursor={'pointer'}
-                  paddingAngle={1}
-                  onClick={(val) => {
-                    window.open(`/storage-providers/${val.name}`, '_blank');
-                  }}
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={palette(chartData.length, index)} cursor="pointer" />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>}
+            <div className={cn(s.table, tableOpened && s.opened)}>
+              <button className={cn(s.toggle)} onClick={() => setTableOpened(!tableOpened)}>
+                <span>
+                  {tableOpened ? 'Hide' : 'Show'} table
+                </span>
+              </button>
+              <Table hovered={activeIndex} hoverColor={palette(chartData.length, activeIndex)} setHovered={setActiveIndex} table={table} data={data?.stats} loading={loading} noControls noWrap />
+            </div>
           </div>
         </div>
       </div>
