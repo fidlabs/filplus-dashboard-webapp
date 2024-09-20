@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '../utils/api';
 import { useFetch } from './fetch';
 
-const CPD_API = `https://compliance.allocator.tech`;
+const ALLOCATOR_TECH_API = `https://compliance.allocator.tech`;
+const CDP_API = `https://cdp.allocator.tech`;
 
 const useCDP = () => {
 
   const getRetrievabilitySP = () => {
     const fetch = async () => {
-      const data = await api(`${CPD_API}/stats/providers/retrievability`, {}, true);
+      const data = await api(`${ALLOCATOR_TECH_API}/stats/providers/retrievability`, {}, true);
       return {
         avg_success_rate_pct: data?.avg_success_rate_pct,
         count: data?.providers_retrievability_score_histogram?.total_count,
@@ -32,7 +33,7 @@ const useCDP = () => {
 
   const getRetrievabilityAllocator = () => {
     const fetch = async () => {
-      const data = await api(`${CPD_API}/stats/allocators/retrievability`, {}, true);
+      const data = await api(`${ALLOCATOR_TECH_API}/stats/allocators/retrievability`, {}, true);
       return {
         avg_score: data?.avg_score,
         count: data?.allocators_retrievability_score_histogram?.total_count,
@@ -56,10 +57,10 @@ const useCDP = () => {
 
   const getNumberOfDealsSP = () => {
     const fetch = async () => {
-      const data = await api(`${CPD_API}/stats/providers/clients`, {}, true);
+      const data = await api(`${CDP_API}/stats/providers/clients`, {}, true);
       return {
-        count: data?.providers_client_count_histogram?.total_count,
-        buckets: data?.providers_client_count_histogram?.buckets
+        count: data?.total,
+        buckets: data?.results
       };
     };
 
@@ -79,7 +80,7 @@ const useCDP = () => {
 
   const getSizeOfTheBiggestDealSP = () => {
     const fetch = async () => {
-      const data = await api(`${CPD_API}/stats/providers/biggest_client_distribution`, {}, true);
+      const data = await api(`${ALLOCATOR_TECH_API}/stats/providers/biggest_client_distribution`, {}, true);
       return {
         count: data?.providers_biggest_client_distribution_histogram?.total_count,
         buckets: data?.providers_biggest_client_distribution_histogram?.buckets
@@ -102,7 +103,7 @@ const useCDP = () => {
 
   const getSizeOfTheBiggestClientAllocator = () => {
     const fetch = async () => {
-      const data = await api(`${CPD_API}/stats/allocators/biggest_client_distribution`, {}, true);
+      const data = await api(`${ALLOCATOR_TECH_API}/stats/allocators/biggest_client_distribution`, {}, true);
       return {
         count: data?.allocators_biggest_client_distribution_histogram?.total_count,
         buckets: data?.allocators_biggest_client_distribution_histogram?.buckets
@@ -125,7 +126,7 @@ const useCDP = () => {
 
   const getProviderComplianceAllocator = (from, to) => {
     const fetch = async () => {
-      const data = await api(`${CPD_API}/stats/allocators/sps_compliance?min_compliance_score=${from}&max_compliance_score=${to}`, {}, true);
+      const data = await api(`${ALLOCATOR_TECH_API}/stats/allocators/sps_compliance?min_compliance_score=${from}&max_compliance_score=${to}`, {}, true);
       return {
         count: data?.allocators_sps_compliance_distribution_histogram?.total_count,
         buckets: data?.allocators_sps_compliance_distribution_histogram?.buckets
@@ -224,6 +225,24 @@ const useCDP = () => {
     };
   }, []);
 
+  const parseSingleBucketWeek = useCallback((bucket, index, length, unit = '') => {
+    let name = `${bucket.valueFromExclusive} - ${bucket.valueToExclusive}${unit}`;
+    if (bucket.valueToExclusive - bucket.valueFromExclusive <= 1) {
+      const unitWithoutS = unit.slice(0, -1);
+      name = `${bucket.valueToExclusive}${bucket.valueToExclusive === 1 ? unitWithoutS : unit}`;
+    } else if (index === 0) {
+      const unitWithoutS = unit.slice(0, -1);
+      name = `${bucket.valueFromExclusive < 0 ? '' : 'Less than '}${bucket.valueToExclusive}${bucket.valueToExclusive === 1 ? unitWithoutS : unit}`;
+    } else if (index === length - 1) {
+      name = `Over ${bucket.valueFromExclusive}${unit}`;
+    }
+    console.log(name, bucket);
+    return {
+      name,
+      value: bucket.count
+    };
+  }, []);
+
   const parseBucketGroup = useCallback((group, index, length, unit = '') => {
     let name = `${group[0].value_from_exclusive} - ${group[group.length - 1].value_to_inclusive}${unit}`;
     if (index === 0) {
@@ -237,12 +256,27 @@ const useCDP = () => {
     };
   }, []);
 
+  const parseBucketGroupWeek = useCallback((group, index, length, unit = '') => {
+    let name = `${group[0].valueFromExclusive} - ${group[group.length - 1].valueToExclusive}${unit}`;
+    if (index === 0) {
+      name = `Less than ${group[group.length - 1].valueToExclusive}${unit}`;
+    } else if (index === length - 1) {
+      name = `Over ${group[0].valueFromExclusive}${unit}`;
+    }
+    return {
+      name,
+      value: group.reduce((acc, bucket) => acc + bucket.count, 0)
+    };
+  }, []);
+
   return {
     getRetrievabilitySP,
     getNumberOfDealsSP,
     groupData,
     parseSingleBucket,
+    parseSingleBucketWeek,
     parseBucketGroup,
+    parseBucketGroupWeek,
     getSizeOfTheBiggestDealSP,
     getRetrievabilityAllocator,
     getSizeOfTheBiggestClientAllocator,

@@ -2,7 +2,6 @@ import { config } from 'config';
 
 export const api = async (url, { headers = {}, data, ...restOptions } = {}, absolutePath = false) => {
   const requestHeaders = Object.entries({
-    'Content-Type': 'application/json',
     ...headers,
   }).reduce((a, [k, v]) => (v == null ? a : { ...a, [k]: v }), {});
 

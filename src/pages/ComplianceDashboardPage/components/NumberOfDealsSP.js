@@ -1,9 +1,9 @@
 import { useCDP, useScrollObserver, useChartScale } from 'hooks';
 import { useEffect } from 'react';
 import { TabsSelector } from 'components';
-import BarGraph from './BarGraph';
-import useChartData from '../hooks/useChartData';
 import SharedScaleTabs from './SharedScaleTabs';
+import StackedBarGraph from './StackedBarGraph';
+import useWeeklyChartData from '../hooks/useWeeklyChartData';
 
 
 const NumberOfDealsSP = ({setCurrentElement}) => {
@@ -13,7 +13,7 @@ const NumberOfDealsSP = ({setCurrentElement}) => {
 
   const { top, ref } = useScrollObserver();
 
-  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useChartData(data?.buckets, ' deals')
+  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useWeeklyChartData(data?.buckets, ' deals')
   const { scale, selectedScale, setSelectedScale } = useChartScale(minValue)
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const NumberOfDealsSP = ({setCurrentElement}) => {
             </div>
           </div>
           <div className="size6">
-            <BarGraph data={chartData} scale={scale} isLoading={isLoading}/>
+            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading}/>
           </div>
         </div>
 

@@ -164,7 +164,6 @@ export const DataCapUsedOverTime = () => {
   }, [parsedData, weeksToDisplay]);
 
   const filteredData = useMemo(() => {
-    console.log(parsedData)
     return parsedData.filter((item) => weeksToDisplay.some((key) => Object.keys(item).includes(key)));
   }, [parsedData, weeksToDisplay]);
 
