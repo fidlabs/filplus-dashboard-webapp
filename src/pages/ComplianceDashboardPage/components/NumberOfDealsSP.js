@@ -5,7 +5,6 @@ import SharedScaleTabs from './SharedScaleTabs';
 import StackedBarGraph from './StackedBarGraph';
 import useWeeklyChartData from '../hooks/useWeeklyChartData';
 
-
 const NumberOfDealsSP = ({setCurrentElement}) => {
   const {
     data, isLoading

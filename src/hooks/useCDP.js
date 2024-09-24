@@ -9,11 +9,11 @@ const useCDP = () => {
 
   const getRetrievabilitySP = () => {
     const fetch = async () => {
-      const data = await api(`${ALLOCATOR_TECH_API}/stats/providers/retrievability`, {}, true);
+      const data = await api(`${CDP_API}/stats/providers/retrievability`, {}, true);
       return {
-        avg_success_rate_pct: data?.avg_success_rate_pct,
-        count: data?.providers_retrievability_score_histogram?.total_count,
-        buckets: data?.providers_retrievability_score_histogram?.buckets
+        avg_success_rate_pct: data?.avg_score,
+        count: data?.histogram?.total,
+        buckets: data?.histogram?.results
       };
     };
 
@@ -80,10 +80,10 @@ const useCDP = () => {
 
   const getSizeOfTheBiggestDealSP = () => {
     const fetch = async () => {
-      const data = await api(`${ALLOCATOR_TECH_API}/stats/providers/biggest_client_distribution`, {}, true);
+      const data = await api(`${CDP_API}/stats/providers/biggest-client-distribution`, {}, true);
       return {
-        count: data?.providers_biggest_client_distribution_histogram?.total_count,
-        buckets: data?.providers_biggest_client_distribution_histogram?.buckets
+        count: data?.total,
+        buckets: data?.results
       };
     };
 
