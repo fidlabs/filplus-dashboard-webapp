@@ -28,7 +28,6 @@ const BiggestDealsSP = ({setCurrentElement}) => {
         <div className="chartHeader">
           <div>Size Of The Biggest Deal</div>
           <div className="chartHeaderOptions">
-            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale} />
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
           </div>
         </div>

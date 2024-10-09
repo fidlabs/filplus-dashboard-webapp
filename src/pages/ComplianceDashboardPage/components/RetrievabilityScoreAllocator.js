@@ -1,9 +1,9 @@
 import { useCDP, useScrollObserver, useChartScale } from 'hooks';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TabsSelector } from 'components';
-import BarGraph from './BarGraph';
-import useChartData from '../hooks/useChartData';
 import SharedScaleTabs from './SharedScaleTabs';
+import useWeeklyChartData from '../hooks/useWeeklyChartData';
+import StackedBarGraph from './StackedBarGraph';
 
 const RetrievabilityScoreAllocator = ({setCurrentElement}) => {
   const {
@@ -11,7 +11,7 @@ const RetrievabilityScoreAllocator = ({setCurrentElement}) => {
   } = useCDP().getRetrievabilityAllocator()
 
   const { top, ref } = useScrollObserver()
-  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useChartData(data?.buckets, '%')
+  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useWeeklyChartData(data?.buckets, '%')
   const { scale, selectedScale, setSelectedScale } = useChartScale(minValue)
 
 
@@ -28,7 +28,6 @@ const RetrievabilityScoreAllocator = ({setCurrentElement}) => {
         <div className="chartHeader">
           <div>Retrievability Score</div>
           <div className="chartHeaderOptions">
-            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale}/>
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
           </div>
         </div>
@@ -52,7 +51,7 @@ const RetrievabilityScoreAllocator = ({setCurrentElement}) => {
             </div>
           </div>
           <div className="size6">
-            <BarGraph data={chartData} scale={scale} isLoading={isLoading}/>
+            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading}/>
           </div>
         </div>
 

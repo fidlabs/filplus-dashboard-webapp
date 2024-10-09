@@ -6,7 +6,7 @@ import ChartLoader from './ChartLoader';
 import { uniq } from 'lodash/array';
 import { useMemo } from 'react';
 
-const StackedBarGraph = ({ data, scale = 'linear', isLoading }) => {
+const StackedBarGraph = ({ data, scale = 'linear', isLoading, color }) => {
 
   if (!data?.length) {
     return null;
@@ -70,10 +70,10 @@ const StackedBarGraph = ({ data, scale = 'linear', isLoading }) => {
         <Tooltip content={renderTooltip} />
         <XAxis dataKey="name" angle={data.length > 6 ? 90 : 0} interval={0} minTickGap={0}
                tick={data.length > 6 ? <CustomizedAxisTick /> : true} />
-        <YAxis scale={scale} domain={[0, parseDataMax]} />
+        <YAxis domain={[0, parseDataMax]} />
         <Tooltip />
         {dataKeys.map((key, index) => <Bar key={key} dataKey={key}
-                                          stackId="a" fill={palette(0, index)} />)}
+                                          stackId="a" fill={color ?? palette(0, index)} />)}
         ))
       </BarChart>
     </ResponsiveContainer>

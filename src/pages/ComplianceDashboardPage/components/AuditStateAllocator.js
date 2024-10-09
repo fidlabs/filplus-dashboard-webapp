@@ -25,7 +25,6 @@ const AuditStateAllocator = ({setCurrentElement}) => {
         <div className="chartHeader">
           <div>Audit state</div>
           <div className="chartHeaderOptions">
-            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale} />
           </div>
         </div>
       </div>

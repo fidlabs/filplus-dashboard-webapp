@@ -28,7 +28,6 @@ const RetrievabilityScoreSP = ({setCurrentElement}) => {
         <div className="chartHeader">
           <div>Retrievability Score</div>
           <div className="chartHeaderOptions">
-            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale}/>
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
           </div>
         </div>

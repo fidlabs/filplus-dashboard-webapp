@@ -4,7 +4,7 @@ import { useCommonChart } from '../providers/CommonChartProvider';
 import { format } from 'date-fns';
 import { uniq } from 'lodash/array';
 
-const useWeeklyChartData = (data, unit = '') => {
+const useWeeklyChartData = (data, unit = '', defaultTab = 0) => {
   const {
     groupData,
     parseSingleBucketWeek,
@@ -15,7 +15,7 @@ const useWeeklyChartData = (data, unit = '') => {
     barTabs, globalBarTab
   } = useCommonChart();
 
-  const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(defaultTab);
 
   const chartData = useMemo(() => {
 

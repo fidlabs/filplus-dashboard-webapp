@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '../utils/api';
 import { useFetch } from './fetch';
+import { difference } from 'lodash';
 
-const ALLOCATOR_TECH_API = `https://compliance.allocator.tech`;
 const CDP_API = `https://cdp.allocator.tech`;
 
 const useCDP = () => {
 
   const getRetrievabilitySP = () => {
     const fetch = async () => {
-      const data = await api(`${CDP_API}/stats/providers/retrievability`, {}, true);
+      const data = await api(`${CDP_API}/stats/acc/providers/retrievability`, {}, true);
       return {
-        avg_success_rate_pct: data?.avg_score,
+        avg_success_rate_pct: data?.averageSuccessRate,
         count: data?.histogram?.total,
         buckets: data?.histogram?.results
       };
@@ -33,11 +33,11 @@ const useCDP = () => {
 
   const getRetrievabilityAllocator = () => {
     const fetch = async () => {
-      const data = await api(`${ALLOCATOR_TECH_API}/stats/allocators/retrievability`, {}, true);
+      const data = await api(`${CDP_API}/stats/acc/allocators/retrievability`, {}, true);
       return {
-        avg_score: data?.avg_score,
-        count: data?.allocators_retrievability_score_histogram?.total_count,
-        buckets: data?.allocators_retrievability_score_histogram?.buckets
+        avg_score: data?.averageSuccessRate,
+        count: data?.histogram?.total,
+        buckets: data?.histogram?.results
       };
     };
 
@@ -57,7 +57,7 @@ const useCDP = () => {
 
   const getNumberOfDealsSP = () => {
     const fetch = async () => {
-      const data = await api(`${CDP_API}/stats/providers/clients`, {}, true);
+      const data = await api(`${CDP_API}/stats/acc/providers/clients`, {}, true);
       return {
         count: data?.total,
         buckets: data?.results
@@ -80,7 +80,7 @@ const useCDP = () => {
 
   const getSizeOfTheBiggestDealSP = () => {
     const fetch = async () => {
-      const data = await api(`${CDP_API}/stats/providers/biggest-client-distribution`, {}, true);
+      const data = await api(`${CDP_API}/stats/acc/providers/biggest-client-distribution`, {}, true);
       return {
         count: data?.total,
         buckets: data?.results
@@ -103,10 +103,10 @@ const useCDP = () => {
 
   const getSizeOfTheBiggestClientAllocator = () => {
     const fetch = async () => {
-      const data = await api(`${ALLOCATOR_TECH_API}/stats/allocators/biggest_client_distribution`, {}, true);
+      const data = await api(`${CDP_API}/stats/acc/allocators/biggest-client-distribution`, {}, true);
       return {
-        count: data?.allocators_biggest_client_distribution_histogram?.total_count,
-        buckets: data?.allocators_biggest_client_distribution_histogram?.buckets
+        count: data?.total,
+        buckets: data?.results
       };
     };
 
@@ -124,13 +124,33 @@ const useCDP = () => {
     };
   };
 
-  const getProviderComplianceAllocator = (from, to) => {
+  const getProviderComplianceAllocator = () => {
+
     const fetch = async () => {
-      const data = await api(`${ALLOCATOR_TECH_API}/stats/allocators/sps_compliance?min_compliance_score=${from}&max_compliance_score=${to}`, {}, true);
-      return {
-        count: data?.allocators_sps_compliance_distribution_histogram?.total_count,
-        buckets: data?.allocators_sps_compliance_distribution_histogram?.buckets
-      };
+      const data = await api(`${CDP_API}/stats/acc/allocators/sps-compliance`, {}, true);
+      const chartData = [];
+      const nonCompliantMetric = data?.results[0]?.histogram?.results;
+      const compliantMetric = data?.results[2]?.histogram?.results;
+      const partiallyCompliantMetric = data?.results[1]?.histogram?.results;
+      const weeks = nonCompliantMetric.map(item => item.week)
+
+      const differedWeeks = difference(weeks, compliantMetric.map(item => item.week), partiallyCompliantMetric.map(item => item.week));
+
+      if (differedWeeks.length) {
+        throw new Error('Weeks are not equal');
+      }
+
+      for (let week of weeks) {
+        const nonCompliant = nonCompliantMetric.find(item => item.week === week);
+        const compliant = compliantMetric.find(item => item.week === week);
+        console.log('compliant', compliant?.results?.filter(value => value.valueFromExclusive >= 80))
+        const partiallyCompliant = partiallyCompliantMetric.find(item => item.week === week);
+        chartData.push({
+          week
+        });
+      }
+
+      return chartData;
     };
 
     const [data, setData] = useState(undefined);
@@ -139,7 +159,7 @@ const useCDP = () => {
     useEffect(() => {
       setIsLoading(true);
       fetch().then(setData).then(() => setIsLoading(false));
-    }, [from, to]);
+    }, []);
 
     return {
       data,
@@ -226,17 +246,16 @@ const useCDP = () => {
   }, []);
 
   const parseSingleBucketWeek = useCallback((bucket, index, length, unit = '') => {
-    let name = `${bucket.valueFromExclusive} - ${bucket.valueToExclusive}${unit}`;
-    if (bucket.valueToExclusive - bucket.valueFromExclusive <= 1) {
+    let name = `${bucket.valueFromExclusive + 1} - ${bucket.valueToInclusive}${unit}`;
+    if (bucket.valueToInclusive - bucket.valueFromExclusive <= 1) {
       const unitWithoutS = unit.slice(0, -1);
-      name = `${bucket.valueToExclusive}${bucket.valueToExclusive === 1 ? unitWithoutS : unit}`;
+      name = `${bucket.valueToInclusive}${bucket.valueToInclusive === 1 ? unitWithoutS : unit}`;
     } else if (index === 0) {
       const unitWithoutS = unit.slice(0, -1);
-      name = `${bucket.valueFromExclusive < 0 ? '' : 'Less than '}${bucket.valueToExclusive}${bucket.valueToExclusive === 1 ? unitWithoutS : unit}`;
+      name = `${bucket.valueFromExclusive < 0 ? '' : 'Less than '}${bucket.valueToInclusive}${bucket.valueToInclusive === 1 ? unitWithoutS : unit}`;
     } else if (index === length - 1) {
       name = `Over ${bucket.valueFromExclusive}${unit}`;
     }
-    console.log(name, bucket);
     return {
       name,
       value: bucket.count
@@ -257,9 +276,9 @@ const useCDP = () => {
   }, []);
 
   const parseBucketGroupWeek = useCallback((group, index, length, unit = '') => {
-    let name = `${group[0].valueFromExclusive} - ${group[group.length - 1].valueToExclusive}${unit}`;
+    let name = `${group[0].valueFromExclusive + 1} - ${group[group.length - 1].valueToInclusive}${unit}`;
     if (index === 0) {
-      name = `Less than ${group[group.length - 1].valueToExclusive}${unit}`;
+      name = `Less than ${group[group.length - 1].valueToInclusive}${unit}`;
     } else if (index === length - 1) {
       name = `Over ${group[0].valueFromExclusive}${unit}`;
     }

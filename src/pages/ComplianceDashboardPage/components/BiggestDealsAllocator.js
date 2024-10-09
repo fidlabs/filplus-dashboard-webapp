@@ -1,9 +1,9 @@
 import { useCDP, useScrollObserver, useChartScale } from 'hooks';
 import { useEffect } from 'react';
 import { TabsSelector } from 'components';
-import BarGraph from './BarGraph';
-import useChartData from '../hooks/useChartData';
 import SharedScaleTabs from './SharedScaleTabs';
+import useWeeklyChartData from '../hooks/useWeeklyChartData';
+import StackedBarGraph from './StackedBarGraph';
 
 const tabs = ['3 bars', '6 bars', 'All']
 
@@ -14,7 +14,7 @@ const BiggestDealsAllocator = ({setCurrentElement}) => {
 
   const { top, ref } = useScrollObserver();
 
-  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useChartData(data?.buckets, '%')
+  const { chartData, currentTab, setCurrentTab, tabs, minValue } = useWeeklyChartData(data?.buckets, '%')
   const { scale, selectedScale, setSelectedScale } = useChartScale(minValue)
 
   useEffect(() => {
@@ -30,7 +30,6 @@ const BiggestDealsAllocator = ({setCurrentElement}) => {
         <div className="chartHeader">
           <div>Size of the biggest allocation</div>
           <div className="chartHeaderOptions">
-            <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale} />
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
           </div>
         </div>
@@ -46,7 +45,7 @@ const BiggestDealsAllocator = ({setCurrentElement}) => {
             </div>
           </div>
           <div className="size6">
-            <BarGraph data={chartData} scale={scale} isLoading={isLoading}/>
+            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading}/>
           </div>
         </div>
 

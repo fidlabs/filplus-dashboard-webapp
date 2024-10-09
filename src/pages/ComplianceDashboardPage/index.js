@@ -99,7 +99,6 @@ const ComplianceDashboard = () => {
               <BiggestDealsAllocator setCurrentElement={scrollCallback} />
               <ProviderComplianceAllocator setCurrentElement={scrollCallback} />
               <AuditStateAllocator setCurrentElement={scrollCallback} />
-
             </>
           </div>
         </div>
