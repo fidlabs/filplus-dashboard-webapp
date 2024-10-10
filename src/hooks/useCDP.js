@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '../utils/api';
 import { useFetch } from './fetch';
 import { difference } from 'lodash';
+import { format } from 'date-fns';
 
 const CDP_API = `https://cdp.allocator.tech`;
 
@@ -132,7 +133,7 @@ const useCDP = () => {
       const nonCompliantMetric = data?.results[0]?.histogram?.results;
       const compliantMetric = data?.results[2]?.histogram?.results;
       const partiallyCompliantMetric = data?.results[1]?.histogram?.results;
-      const weeks = nonCompliantMetric.map(item => item.week)
+      const weeks = nonCompliantMetric.map(item => item.week)?.sort((a, b) => new Date(a) - new Date(b));
 
       const differedWeeks = difference(weeks, compliantMetric.map(item => item.week), partiallyCompliantMetric.map(item => item.week));
 
@@ -142,11 +143,20 @@ const useCDP = () => {
 
       for (let week of weeks) {
         const nonCompliant = nonCompliantMetric.find(item => item.week === week);
-        const compliant = compliantMetric.find(item => item.week === week);
-        console.log('compliant', compliant?.results?.filter(value => value.valueFromExclusive >= 80))
+        const nonCompliantCount = nonCompliant?.total;
         const partiallyCompliant = partiallyCompliantMetric.find(item => item.week === week);
+        const partiallyCompliantCount = partiallyCompliant?.results?.filter(item => item.valueFromExclusive >= 80)?.reduce((acc, item) => acc + item.count, 0);
+        const compliant = compliantMetric.find(item => item.week === week);
+        const compliantCount = compliant?.results?.filter(item => item.valueFromExclusive >= 80)?.reduce((acc, item) => acc + item.count, 0);
+
         chartData.push({
-          week
+          name: `w${format(new Date(week), 'ww yyyy')}`,
+          nonCompliant: nonCompliantCount - partiallyCompliantCount - compliantCount,
+          nonCompliantName: 'Non compliant',
+          partiallyCompliant: partiallyCompliantCount,
+          partiallyCompliantName: 'Partially compliant',
+          compliant: compliantCount,
+          compliantName: 'Compliant',
         });
       }
 

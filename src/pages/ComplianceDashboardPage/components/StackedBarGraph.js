@@ -23,11 +23,11 @@ const StackedBarGraph = ({ data, scale = 'linear', isLoading, color }) => {
         <div className="chartTooltipTitle">{payload.name}</div>
         <div className="chartTooltipData">{
           dataKeys.map((key, index) => {
-            const value = payload[`group${index}`];
+            const value = payload[`group${index}`] ?? payload[key];
             if (!value) {
               return null;
             }
-            const name = payload[`group${index}Name`];
+            const name = payload[`group${index}Name`] ?? payload[`${key}Name`] ?? key;
             return <div key={key} className="chartTooltipRow">
               <div style={{ color: palette(0, index) }} >{name} - {value} providers</div>
             </div>
