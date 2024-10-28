@@ -5,7 +5,9 @@ export const api = async (url, { headers = {}, data, ...restOptions } = {}, abso
     ...headers,
   }).reduce((a, [k, v]) => (v == null ? a : { ...a, [k]: v }), {});
 
-  const response = await fetch(absolutePath ? url :`${config.apiBaseUrl}${url}`, {
+  const isAbsoluteUrl = url.startsWith('http') || absolutePath;
+
+  const response = await fetch(isAbsoluteUrl ? url :`${config.apiBaseUrl}${url}`, {
     headers: new Headers(requestHeaders),
     mode: 'cors',
     ...restOptions,

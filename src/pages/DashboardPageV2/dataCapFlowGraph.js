@@ -1,5 +1,5 @@
 import { convertBytesToIEC } from 'utils/bytes';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ResponsiveContainer, Sankey, Tooltip } from 'recharts';
 import s from './s.module.css';
 import cn from 'classnames';
@@ -8,13 +8,16 @@ import { useDataCapFlow } from 'hooks';
 
 export const DataCapFlowGraph = () => {
   const {
-    dataCapFlow
+    dataCapFlow, loaded
   } = useDataCapFlow(false);
 
-  const [selectedNodes, setSelectedNodes] = useState([{
-    id: 0,
-    name: 'Root Key Holder',
-  }]);
+  const [selectedNodes, setSelectedNodes] = useState([]);
+
+  useEffect(() => {
+    if (loaded) {
+      setSelectedNodes([dataCapFlow[0]]);
+    }
+  }, [dataCapFlow, loaded]);
 
   const renderTooltip = (props) => {
     const linkData = props?.payload?.[0]?.payload?.payload;
@@ -35,9 +38,9 @@ export const DataCapFlowGraph = () => {
         <div className={'chartTooltipData'}>
           {convertBytesToIEC(datacap)} Datacap
         </div>
-        {allocators > 0 && <div className={'chartTooltipData'}>
+        <div className={'chartTooltipData'}>
           {allocators} Allocators
-        </div>}
+        </div>
       </div>
     </>);
   };
@@ -60,12 +63,9 @@ export const DataCapFlowGraph = () => {
       return
     }
 
-    const arrayIndex = data?.payload?.arrayIndex;
+    const childObject = data?.payload?.childObject;
 
-    setSelectedNodes([...selectedNodes, {
-      id: arrayIndex,
-      name: name,
-    }]);
+    setSelectedNodes([...selectedNodes, childObject]);
   };
 
   const handleBackClick = (backIndex) => {
@@ -73,14 +73,11 @@ export const DataCapFlowGraph = () => {
   };
 
   const sankeyData = useMemo(() => {
-    if (!dataCapFlow?.length) {
+    if (!selectedNodes?.length) {
       return null;
     }
 
-    let currentNode = dataCapFlow[selectedNodes[0].id];
-    for (let i = 1; i < selectedNodes.length; i++) {
-      currentNode = currentNode.children[selectedNodes[i].id];
-    }
+    const currentNode = selectedNodes[selectedNodes.length - 1];
 
     return {
       nodes: [{
@@ -88,25 +85,24 @@ export const DataCapFlowGraph = () => {
         datacap: currentNode?.attributes?.datacap,
         allocators: currentNode?.attributes?.allocators,
         isParent: selectedNodes.length > 1,
-      }, ...currentNode?.children?.map((child, index) => ({
+      }, ...currentNode?.children?.map((child) => ({
         name: child?.name,
         datacap: child?.attributes?.datacap,
         allocators: child?.attributes?.allocators,
-        arrayIndex: index,
-        children: child?.children,
-        hasChildren: !!child?.children?.map(item => !!item.children?.length).filter(val => !!val).length
+        childObject: child,
+        // hasChildren: !!child?.children?.map(item => !!item.children?.length).filter(val => !!val).length,
+        hasChildren: !!child?.children?.map(item => !!item.children?.length).filter(val => !!val).length,
       })) || []],
       links: currentNode?.children?.map((child, index) => ({
         source: 0,
         target: index + 1,
-        arrayIndex: index,
-        value: child?.attributes?.datacap,
+        value: child?.attributes?.datacap + 1,
         datacap: child?.attributes?.datacap,
         allocators: child?.attributes?.allocators,
-        children: child?.children,
-        hasChildren: !!child?.children?.map(item => !!item.children?.length).filter(val => !!val).length
+        // hasChildren: !!child?.children?.map(item => !!item.children?.length).filter(val => !!val).length,
+        hasChildren: !!child?.children?.map(item => !!item.children?.length).filter(val => !!val).length,
       })) || []
-    }
+    };
 
   }, [dataCapFlow, selectedNodes]);
 

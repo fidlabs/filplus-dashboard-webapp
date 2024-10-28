@@ -116,9 +116,9 @@ export default function DashboardPage() {
             </button>
           </div>
           <div className={cn(s.cardData, !toggle && s.cardDataHidden)}>
-            <ContentTabs tabs={['Allocators tree', 'DataCap flow']}>
-              <DataCapFlowTree />
+            <ContentTabs tabs={['DataCap flow', 'DataCap tree']}>
               <DataCapFlowGraph />
+              <DataCapFlowTree />
             </ContentTabs>
           </div>
         </div>

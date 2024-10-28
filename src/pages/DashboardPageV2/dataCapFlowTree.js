@@ -10,6 +10,7 @@ export const DataCapFlowTree = () => {
     dataCapFlow
   } = useDataCapFlow();
 
+  console.log('dataCapFlow for tree', dataCapFlow);
 
   const [dimensions, setDimensions] = useState({
     width: 0, height: 0
