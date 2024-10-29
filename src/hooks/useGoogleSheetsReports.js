@@ -11,7 +11,7 @@ const useGoogleSheetsAuditReport = () => {
     '/getVerifiers?showInactive=false'
   );
 
-  const [googleSheetsData, { loading: googleLoading }] = useFetch(`https://sheets.googleapis.com/v4/spreadsheets/1Rx3ZsUh7rhjdAARBNdBHgdbhBM5zFlEnqghC7A0JZ4k/values/GRAPHS?key=AIzaSyAu2rJkwoZRJF-7A9j1gd_odIK9CiWMt0s`);
+  const [googleSheetsData, { loading: googleLoading }] = useFetch(`https://sheets.googleapis.com/v4/spreadsheets/1Rx3ZsUh7rhjdAARBNdBHgdbhBM5zFlEnqghC7A0JZ4k/values/GRAPHS?key=${process.env.REACT_APP_GAPI_SHEETS}`);
 
   const loading = useMemo(() => dataLoading || googleLoading, [dataLoading, googleLoading]);
 
