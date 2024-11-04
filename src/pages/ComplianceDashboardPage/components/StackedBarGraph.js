@@ -6,7 +6,7 @@ import ChartLoader from './ChartLoader';
 import { uniq } from 'lodash/array';
 import { useMemo } from 'react';
 
-const StackedBarGraph = ({ data, scale = 'linear', isLoading, color }) => {
+const StackedBarGraph = ({ data, scale = 'linear', isLoading, color, unit = 'allocators' }) => {
 
   if (!data?.length) {
     return null;
@@ -29,7 +29,7 @@ const StackedBarGraph = ({ data, scale = 'linear', isLoading, color }) => {
             }
             const name = payload[`group${index}Name`] ?? payload[`${key}Name`] ?? key;
             return <div key={key} className="chartTooltipRow">
-              <div style={{ color: palette(0, index) }} >{name} - {value} providers</div>
+              <div style={{ color: palette(0, index) }} >{name} - {value} {unit}</div>
             </div>
           })
         }</div>

@@ -44,7 +44,7 @@ const NumberOfDealsSP = ({setCurrentElement}) => {
             </div>
           </div>
           <div className="size6">
-            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading}/>
+            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading} unit="providers"/>
           </div>
         </div>
 

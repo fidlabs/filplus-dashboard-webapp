@@ -26,7 +26,7 @@ const BiggestDealsSP = ({setCurrentElement}) => {
     <div className="card">
       <div className="cardTitle noMargin">
         <div className="chartHeader">
-          <div>Size Of The Biggest Deal</div>
+          <div>Size Of The Biggest client allocation</div>
           <div className="chartHeaderOptions">
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
           </div>
@@ -51,7 +51,7 @@ const BiggestDealsSP = ({setCurrentElement}) => {
             </div>
           </div>
           <div className="size6">
-            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading} />
+            <StackedBarGraph data={chartData} scale={scale} isLoading={isLoading} unit="providers" />
           </div>
         </div>
 
