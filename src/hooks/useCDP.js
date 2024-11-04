@@ -3,6 +3,7 @@ import { api } from '../utils/api';
 import { useFetch } from './fetch';
 import { difference } from 'lodash';
 import { format } from 'date-fns';
+import { useGoogleSheetsAuditReport } from './useGoogleSheetsReports';
 
 const CDP_API = `https://cdp.allocator.tech`;
 
@@ -177,51 +178,6 @@ const useCDP = () => {
     };
   };
 
-  const getAuditStateAllocator = () => {
-    const fetchUrl = '/get-dc-flow-graph-grouped-by-audit-status';
-    const [data, { loading, loaded }] = useFetch(fetchUrl);
-
-    const chartData = useMemo(() => {
-      if (!data?.rkh) {
-        return [];
-      }
-
-      const chartData = [
-        {
-          name: 'Inactive',
-          value: data.rkh.inactiveAllocators.allocators.length,
-          dc: data.rkh.inactiveAllocators.allocators.totalDc
-        }, {
-          name: 'Not Audited',
-          value: data.rkh.activeAllocators.notAudited.allocators.length,
-          dc: data.rkh.activeAllocators.notAudited.totalDc
-        }, {
-          name: 'Failed Audit',
-          value: data.rkh.activeAllocators.failedAudit.allocators.length,
-          dc: data.rkh.activeAllocators.failedAudit.totalDc
-        }, {
-          name: 'Passed Conditionally',
-          value: data.rkh.activeAllocators.passedAuditConditionally.allocators.length,
-          dc: data.rkh.activeAllocators.passedAuditConditionally.totalDc
-        }, {
-          name: 'Audit Passed',
-          value: data.rkh.activeAllocators.passedAudit.allocators.length,
-          dc: data.rkh.activeAllocators.passedAudit.totalDc
-        }
-      ];
-
-      return {
-        count: chartData.reduce((acc, item) => acc + item.value, 0),
-        chartData
-      };
-    }, [data]);
-
-    return {
-      data: chartData,
-      isLoading: loading
-    };
-  };
-
   const groupData = useCallback((data, groupCount) => {
 
     if (!data || !data.length || !groupCount) {
@@ -310,7 +266,6 @@ const useCDP = () => {
     getRetrievabilityAllocator,
     getSizeOfTheBiggestClientAllocator,
     getProviderComplianceAllocator,
-    getAuditStateAllocator
   };
 };
 

@@ -11,7 +11,9 @@ const useGoogleSheetsAuditReport = () => {
     '/getVerifiers?showInactive=false'
   );
 
-  const [googleSheetsData, { loading: googleLoading }] = useFetch(`https://sheets.googleapis.com/v4/spreadsheets/1Rx3ZsUh7rhjdAARBNdBHgdbhBM5zFlEnqghC7A0JZ4k/values/GRAPHS?key=${process.env.REACT_APP_GAPI_SHEETS}`);
+  console.log(results?.data?.reduce((acc, curr) => acc + +curr.allowance, 0));
+
+  const [googleSheetsData, { loading: googleLoading }] = useFetch(`https://cdp.allocator.tech/proxy/googleapis/allocators-overview`);
 
   const loading = useMemo(() => dataLoading || googleLoading, [dataLoading, googleLoading]);
 

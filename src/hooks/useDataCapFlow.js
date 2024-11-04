@@ -23,7 +23,7 @@ const useDataCapFlow = () => {
       element['children'] = array.map((data) => ({
         name: data.name,
         attributes: {
-          datacap: data.allowance,
+          datacap: data.initialAllowance,
           allocatorId: data.addressId
         },
         children: undefined
@@ -34,7 +34,7 @@ const useDataCapFlow = () => {
 
   const getAttributes = (array) => {
     return {
-      datacap: array.reduce((acc, curr) => acc + +curr.allowance, 0),
+      datacap: array.reduce((acc, curr) => acc + +curr.initialAllowance, 0),
       allocators: array.length
     };
   };

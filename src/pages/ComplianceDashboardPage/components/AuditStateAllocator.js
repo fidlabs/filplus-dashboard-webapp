@@ -1,16 +1,14 @@
 import { useCDP, useScrollObserver, useChartScale } from 'hooks';
-import { useEffect } from 'react';
-import BarGraph from './BarGraph';
-import SharedScaleTabs from './SharedScaleTabs';
+import { useEffect, useMemo } from 'react';
+import AuditHistoryBarGraph from './AuditHistoryBarGraph';
+import { useGoogleSheetsAuditReport } from '../../../hooks/useGoogleSheetsReports';
 
 const AuditStateAllocator = ({setCurrentElement}) => {
-  const {
-    data, isLoading
-  } = useCDP().getAuditStateAllocator()
+  const { results, loading } = useGoogleSheetsAuditReport();
 
   const { top, ref } = useScrollObserver();
 
-  const { scale, selectedScale, setSelectedScale } = useChartScale(data.chartData)
+  const { scale, selectedScale, setSelectedScale } = useChartScale(0)
 
   useEffect(() => {
     if (top > 0 && top < 300) {
@@ -35,11 +33,11 @@ const AuditStateAllocator = ({setCurrentElement}) => {
               Total allocators
             </div>
             <div className="cardData">
-              {data?.count}
+              {results?.data?.length}
             </div>
           </div>
           <div className="size6">
-            <BarGraph data={data.chartData} scale={scale} isLoading={isLoading}/>
+            <AuditHistoryBarGraph data={results?.data} audits={results?.audits} scale={scale} isLoading={loading}/>
           </div>
         </div>
 
