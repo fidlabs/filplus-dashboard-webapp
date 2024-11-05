@@ -67,8 +67,8 @@ const ComplianceDashboard = () => {
                   <div>SPs</div>
                   <div className={s.submenu}>
                     <button onClick={e => scrollTo('RetrievabilityScoreSP')}>Retrievability Score</button>
-                    <button onClick={e => scrollTo('NumberOfDealsSP')}>Number Of Deals</button>
-                    <button onClick={e => scrollTo('BiggestDealsSP')}>Biggest Deal</button>
+                    <button onClick={e => scrollTo('NumberOfDealsSP')}>Number of allocations</button>
+                    <button onClick={e => scrollTo('BiggestDealsSP')}>Biggest allocation</button>
                   </div>
                 </div>
                 <div>

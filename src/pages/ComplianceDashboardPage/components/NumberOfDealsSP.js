@@ -26,7 +26,7 @@ const NumberOfDealsSP = ({setCurrentElement}) => {
     <div className="card">
       <div className="cardTitle noMargin">
         <div className="chartHeader">
-          <div>Number Of Deals</div>
+          <div>Number Of Allocations</div>
           <div className="chartHeaderOptions">
             <SharedScaleTabs scale={selectedScale} setScale={setSelectedScale} />
             <TabsSelector tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
