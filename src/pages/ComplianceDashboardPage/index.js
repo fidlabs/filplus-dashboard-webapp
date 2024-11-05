@@ -77,7 +77,7 @@ const ComplianceDashboard = () => {
                     <button onClick={e => scrollTo('RetrievabilityScoreAllocator')}>Retrievability Score</button>
                     <button onClick={e => scrollTo('BiggestDealsAllocator')}>Biggest allocation</button>
                     <button onClick={e => scrollTo('ProviderComplianceAllocator')}>SP Compliance</button>
-                    {/*<button onClick={e => scrollTo('AuditStateAllocator')}>Audit state</button>*/}
+                    <button onClick={e => scrollTo('AuditStateAllocator')}>Audit state</button>
                   </div>
                 </div>
                 <CommonChartsSettings />
@@ -98,7 +98,7 @@ const ComplianceDashboard = () => {
               <RetrievabilityScoreAllocator setCurrentElement={scrollCallback} />
               <BiggestDealsAllocator setCurrentElement={scrollCallback} />
               <ProviderComplianceAllocator setCurrentElement={scrollCallback} />
-              {/*<AuditStateAllocator setCurrentElement={scrollCallback} />*/}
+              <AuditStateAllocator setCurrentElement={scrollCallback} />
             </>
           </div>
         </div>

@@ -40,9 +40,9 @@ const useGoogleSheetsAuditReport = () => {
 
         returnData.data.push({
           ...result,
-          auditStatuses: googleSheetData ? googleSheetData.slice(firstReviewIndex) : [],
+          auditStatuses: googleSheetData ? googleSheetData.slice(firstReviewIndex).map(item => item.toUpperCase()) : [],
           isActive: googleSheetData && googleSheetData[firstReviewIndex] !== 'Inactive',
-          isAudited: googleSheetData && googleSheetData[firstReviewIndex] !== 'Inactive' && googleSheetData[firstReviewIndex] !== 'Pre Audit'
+          isAudited: googleSheetData && !['Inactive', 'Waiting', 'Pre Audit'].includes(googleSheetData[firstReviewIndex])
         });
       });
 
