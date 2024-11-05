@@ -28,7 +28,7 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
       return 'Passed';
     }
     return 'Pre audit';
-  }
+  };
 
   const getStatusColor = (status) => {
     if (FAILED_STATUSES.includes(status)) {
@@ -41,7 +41,7 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
       return '#66a61e';
     }
     return '#525252';
-  }
+  };
 
   const getOrdinalNumber = (number) => {
     const j = number % 10,
@@ -56,7 +56,7 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
       return number + 'rd';
     }
     return number + 'th';
-  }
+  };
 
   const renderTooltip = (props) => {
     const payload = props?.payload?.[0]?.payload;
@@ -78,7 +78,9 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
             }
             const name = payload[`group${index}Name`] ?? payload[`${key}Name`] ?? key;
             return <div key={key} className="chartTooltipRow">
-              <div>{getOrdinalNumber(+key.substring(1) + 1)} Audit - <span style={{ color: getStatusColor(payload[`${key}Name`]) }}>{getStatusFriendlyName(payload[`${key}Name`])}</span></div>
+              <div>{getOrdinalNumber(+key.substring(1) + 1)} Audit - <span
+                style={{ color: getStatusColor(payload[`${key}Name`]) }}>{getStatusFriendlyName(payload[`${key}Name`])}</span>
+              </div>
             </div>;
           })
         }</div>
@@ -96,8 +98,8 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
         ...item
       };
       item.auditStatuses.forEach((status, index) => {
-        if (index > 0 && WAITING_STATUSES .includes(status) || status === 'INACTIVE') {
-          return
+        if (index > 0 && WAITING_STATUSES.includes(status) || status === 'INACTIVE') {
+          return;
         }
         const key = `a${index}`;
         newItem[key] = 1;
@@ -112,6 +114,34 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
   const dataKeys = useMemo(() => {
     return Array.from({ length: audits }, (_, i) => `a${i}`);
   }, [audits]);
+
+  const renderLegend = () => {
+    return (
+      <div className={s.legend}>
+        <div
+          className={s.item}>
+          <div className={s.indicator} style={{ backgroundColor: getStatusColor('DOUBLE') }} />
+          Passed
+        </div>
+        <div
+          className={s.item}>
+          <div className={s.indicator} style={{ backgroundColor: getStatusColor('THROTTLE') }} />
+          Passed <br/> conditionally
+        </div>
+        <div
+          className={s.item}>
+          <div className={s.indicator} style={{ backgroundColor: getStatusColor('REJECT') }} />
+          Failed
+        </div>
+        <div
+          className={s.item}>
+          <div className={s.indicator} style={{ backgroundColor: getStatusColor('WAITING') }} />
+          Waiting
+        </div>
+
+      </div>
+    );
+  };
 
   if (!data?.length) {
     return null;
@@ -138,14 +168,19 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
               type="checkbox"
               style={{ width: 20, height: 20, cursor: 'pointer' }}
               checked={showActive}
-              onChange={(e) => setShowActive(e.target.checked)}
+              onChange={(e) => {
+                setShowActive(e.target.checked)
+                if (!e.target.checked) {
+                  setShowAudited(false)
+                }
+              }}
             />
-              <span
-                style={{
-                  color: 'var(--theme-text-secondary)',
-                  fontWeight: 500
-                }}
-              >
+            <span
+              style={{
+                color: 'var(--theme-text-secondary)',
+                fontWeight: 500
+              }}
+            >
                 Show only active
               </span>
           </div>
@@ -154,14 +189,19 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
               type="checkbox"
               style={{ width: 20, height: 20, cursor: 'pointer' }}
               checked={showAudited}
-              onChange={(e) => setShowAudited(e.target.checked)}
+              onChange={(e) => {
+                setShowAudited(e.target.checked)
+                if (e.target.checked) {
+                  setShowActive(true)
+                }
+              }}
             />
-              <span
-                style={{
-                  color: 'var(--theme-text-secondary)',
-                  fontWeight: 500
-                }}
-              >
+            <span
+              style={{
+                color: 'var(--theme-text-secondary)',
+                fontWeight: 500
+              }}
+            >
                 Show audited
               </span>
           </div>
@@ -181,11 +221,12 @@ const AuditHistoryBarGraph = ({ data, scale = 'linear', isLoading, audits }) => 
                    tick={chartData.length > 6 ? <CustomizedAxisTick /> : true} />
             <YAxis domain={[0, audits]} tickCount={audits + 1} />
             <Tooltip />
+            <Legend align="right" verticalAlign="middle" layout="vertical" content={renderLegend} />
             {dataKeys.map((key, index) => <Bar key={key} dataKey={key}
                                                stackId="a">
               {
                 chartData.map((entry) => (
-                  <Cell fill={getStatusColor(entry[key+'Name'])}/>
+                  <Cell fill={getStatusColor(entry[key + 'Name'])} />
                 ))
               }
             </Bar>)}
