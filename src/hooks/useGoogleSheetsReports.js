@@ -37,16 +37,20 @@ const useGoogleSheetsAuditReport = () => {
 
       results?.data.forEach((result) => {
         const googleSheetData = googleSheetsData?.values.find((data) => data[allocatorIdIndex] === result.addressId);
+        const auditStatuses = googleSheetData ? googleSheetData.slice(firstReviewIndex).map(item => item.toUpperCase()) : []
 
         returnData.data.push({
           ...result,
-          auditStatuses: googleSheetData ? googleSheetData.slice(firstReviewIndex).map(item => item.toUpperCase()) : [],
-          isActive: googleSheetData && googleSheetData[firstReviewIndex] !== 'Inactive',
-          isAudited: googleSheetData && !['Inactive', 'Waiting', 'Pre Audit'].includes(googleSheetData[firstReviewIndex])
+          auditStatuses,
+          isActive: (googleSheetData && googleSheetData[firstReviewIndex] !== 'Inactive') || false,
+          isAudited: googleSheetData && !['Inactive', 'Waiting', 'Pre Audit'].includes(googleSheetData[firstReviewIndex]),
+          lastValidAudit : auditStatuses.filter(item => !['WAITING', 'PRE AUDIT', 'INACTIVE'].includes(item)).length - 1,
         });
       });
 
       setLoaded(true);
+
+      console.log(returnData)
 
     }
     return returnData;

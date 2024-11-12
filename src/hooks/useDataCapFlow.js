@@ -14,6 +14,8 @@ const useDataCapFlow = () => {
   const { results, loading, loaded } = useGoogleSheetsAuditReport();
 
   const getElement = (name, array, withSimpleChildren = false) => {
+    console.log(name, array, array.map(item => item.auditStatuses))
+
     const element = {
       name,
       attributes: getAttributes(array)

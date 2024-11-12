@@ -146,9 +146,9 @@ const useCDP = () => {
         const nonCompliant = nonCompliantMetric.find(item => item.week === week);
         const nonCompliantCount = nonCompliant?.total;
         const partiallyCompliant = partiallyCompliantMetric.find(item => item.week === week);
-        const partiallyCompliantCount = partiallyCompliant?.results?.filter(item => item.valueFromExclusive >= 80)?.reduce((acc, item) => acc + item.count, 0);
+        const partiallyCompliantCount = partiallyCompliant?.results?.filter(item => item.valueFromExclusive >= 50)?.reduce((acc, item) => acc + item.count, 0);
         const compliant = compliantMetric.find(item => item.week === week);
-        const compliantCount = compliant?.results?.filter(item => item.valueFromExclusive >= 80)?.reduce((acc, item) => acc + item.count, 0);
+        const compliantCount = compliant?.results?.filter(item => item.valueFromExclusive >= 50)?.reduce((acc, item) => acc + item.count, 0);
 
         chartData.push({
           name: `w${format(new Date(week), 'ww yyyy')}`,

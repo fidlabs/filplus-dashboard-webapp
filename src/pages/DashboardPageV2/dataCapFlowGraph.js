@@ -9,7 +9,7 @@ import { useDataCapFlow } from 'hooks';
 export const DataCapFlowGraph = () => {
   const {
     dataCapFlow, loaded
-  } = useDataCapFlow(false);
+  } = useDataCapFlow();
 
   const [selectedNodes, setSelectedNodes] = useState([]);
 
