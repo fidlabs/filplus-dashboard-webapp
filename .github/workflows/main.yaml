@@ -7,8 +7,8 @@ on:
 env:
   SLACK_CHANNEL: infra-ci-filplus
   AWS_REGION: us-east-1
-  S3_BUCKET: production-datacapstatsio-origin
-  CDN_NAME: datacapstats.io
+  S3_BUCKET: production-olddatacapstatsio-origin
+  CDN_NAME: old.datacapstats.io
   BUILD_ENVS: |
     REACT_APP_API_BASE_URL="https://api.datacapstats.io/api"
 
